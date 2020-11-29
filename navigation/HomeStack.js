@@ -6,6 +6,8 @@ import RulesStack from './RulesStack'
 import StatsScreen from '../screens/StatsScreen'
 import AboutScreen from '../screens/AboutScreen'
 
+const Stack = createStackNavigator()
+
 export default function HomeStack() {
 
   return (

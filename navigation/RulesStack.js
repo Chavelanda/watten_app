@@ -6,6 +6,8 @@ import DeckScreen from '../screens/DeckScreen'
 import GameDesScreen from '../screens/GameDesScreen'
 import HistoryScreen from '../screens/HistoryScreen'
 
+const Stack = createStackNavigator()
+
 export default function RulesStack() {
 
   return (
