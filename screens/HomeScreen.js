@@ -1,23 +1,15 @@
 import React from 'react';
-import { View, StyleSheet, Text} from 'react-native';
-import { Button } from 'react-native-elements';
+import { View, StyleSheet, ImageBackground} from 'react-native';
+
+import Home from '../components/Home'
 
 export default function HomeScreen({navigation}) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.title}>
-        <Text>WattenAI</Text>
-      </View>
-      <View style={styles.playContainer}>
-        <Text>Play Container</Text>
-        <Button title='PLAY' onPress={() => navigation.navigate('Play')}/>
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button title='RULES' onPress={() => navigation.navigate('RulesStack')}/>
-        <Button title='STATS' onPress={() => navigation.navigate('Stats')}/>
-        <Button title='ABOUT' onPress={() => navigation.navigate('About')}/>
-      </View>
+      <ImageBackground source={require('../assets/sfondo3.jpg')} style={styles.image}>
+        <Home navigation={navigation}/>
+      </ImageBackground>
     </View>
   )
 }
@@ -25,23 +17,10 @@ export default function HomeScreen({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'red'
   },
-  title: {
+  image: {
     flex: 1,
-    backgroundColor: 'blue',
+    resizeMode: "cover",
+    justifyContent: "center"
   },
-  playContainer: {
-    flex: 1,
-    backgroundColor: 'white',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-  buttonContainer: {
-    flex: 3,
-    backgroundColor: 'gray',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  }
 })
