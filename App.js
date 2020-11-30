@@ -9,8 +9,6 @@ const Stack = createStackNavigator()
 
 export default function App() {
 
-  [playing, setplaying] = useState(false)
-
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -19,11 +17,8 @@ export default function App() {
           headerShown: false
         }}
       >
-        {playing ? (
           <Stack.Screen name='Play' component={PlayScreen} />
-        ) : (
           <Stack.Screen name='HomeStack' component={HomeStack} />
-        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

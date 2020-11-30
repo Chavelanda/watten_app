@@ -12,10 +12,10 @@ export default function HomeStack() {
 
   return (
     <Stack.Navigator initialRouteName='Home'>
-      <Stack.Screen name='Home' component='HomeScreen' />
-      <Stack.Screen name='RulesStack' component='RulesStack' />
-      <Stack.Screen name='Stats' component='StatsScreen' />
-      <Stack.Screen name='About' component='AboutScreen' />
+      <Stack.Screen name='Home' component={HomeScreen} options={{headerShown: false}}/>
+      <Stack.Screen name='RulesStack' component={RulesStack} options={{headerShown: false}}/>
+      <Stack.Screen name='Stats' component={StatsScreen} />
+      <Stack.Screen name='About' component={AboutScreen} />
     </Stack.Navigator>
-  )
+  );
 }
