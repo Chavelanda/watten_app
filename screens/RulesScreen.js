@@ -1,10 +1,13 @@
 import React from 'react';
 import { View, StyleSheet} from 'react-native';
 
-export default function RulesScreen() {
+import Rules from '../components/Rules'
+
+export default function RulesScreen({navigation}) {
 
   return (
     <View style={styles.container}>
+      <Rules navigation={navigation}/>
     </View>
   )
 }
