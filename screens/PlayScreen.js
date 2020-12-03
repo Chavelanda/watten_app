@@ -1,10 +1,12 @@
 import React from 'react';
-import { View, StyleSheet} from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import Game from "../components/Game";
 
-export default function PlayScreen() {
+export default function PlayScreen({route}) {
 
   return (
     <View style={styles.container}>
+      <Game gen={route.params.gen}/>
     </View>
   )
 }

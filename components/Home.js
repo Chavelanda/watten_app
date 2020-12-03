@@ -5,7 +5,7 @@ import { Picker } from '@react-native-picker/picker'
 
 export default function Home({navigation}) {
 
-    [gen, setGen] = useState(0)
+    const [gen, setGen] = useState(0)
 
     return(
         <View style={styles.container}>
@@ -25,7 +25,7 @@ export default function Home({navigation}) {
                     </Picker>
                 </View>
                 <View style={styles.playButtonContainer}>
-                    <Button title='PLAY' type='outline' raised onPress={() => navigation.navigate('Play')}/>
+                    <Button title='PLAY' type='outline' raised onPress={() => navigation.navigate('Play', {gen: gen})}/>
                 </View>
             </View>
             <View style={styles.buttonContainer}>
