@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {View, StyleSheet, Text} from 'react-native';
-import {shuffleArray} from "../utils";
+import {View, StyleSheet, Text, FlatList} from 'react-native';
+import {getRankAndSuit, shuffleArray} from "../utils";
+import Move from "./Move";
 
 export default function SubGame({initGamePrize, gameNumber}) {
 
@@ -37,33 +38,51 @@ export default function SubGame({initGamePrize, gameNumber}) {
         setGamePrize(initGamePrize)
     }
 
-    //used to initialize the game
+    // Used to initialize the game
     useEffect(() => {
         initSubGame()
     }, [gameNumber])
 
 
-    const mapCards = (card) => (
+    const mapDebug = (card) => (
         <Text key={card}>{card} - </Text>
     )
 
+    const mapCards = ({item}) => {
+        const rs = getRankAndSuit(item)
+
+        const name = rankNames[rs[0]] + ' of ' + suitNames[rs[1]]
+
+        return (
+            <Move key={item} actionName={name} actionId={item}/>
+        )
+    }
+
     return (
         <View style={styles.container}>
-            <Text>Deck: {deck.map(mapCards)}</Text>
-            <Text>Player A hand: {handPlayerA.map(mapCards)}</Text>
-            <Text>Player B hand: {handPlayerB.map(mapCards)}</Text>
-            <Text>Played cards: {playedCards}</Text>
-            <Text>Score A: {scorePlayerA}</Text>
-            <Text>Score B: {scorePlayerB}</Text>
-            <Text>Last move raise? {isLastMoveRaise ? 'True' : 'False'}</Text>
-            <Text>Last move accepted raise? {isLastMoveAcceptedRaise ? 'True' : 'False'}</Text>
-            <Text>Last hand raise valid? {isLastHandRaiseValid ? 'True' : 'False'}</Text>
-            <Text>First Card: {firstCardDeck}</Text>
-            <Text>Last Card: {lastCardDeck}</Text>
-            <Text>Rank: {rank}</Text>
-            <Text>Suit: {suit}</Text>
-            <Text>Game prize: {gamePrize}</Text>
-            <Text>Game Number: {gameNumber}</Text>
+            {false ? (<View style={styles.debug}>
+                <Text>Deck: {deck.map(mapDebug)}</Text>
+                <Text>Player A hand: {handPlayerA.map(mapDebug)}</Text>
+                <Text>Player B hand: {handPlayerB.map(mapDebug)}</Text>
+                <Text>Played cards: {playedCards}</Text>
+                <Text>Score A: {scorePlayerA}</Text>
+                <Text>Score B: {scorePlayerB}</Text>
+                <Text>Last move raise? {isLastMoveRaise ? 'True' : 'False'}</Text>
+                <Text>Last move accepted raise? {isLastMoveAcceptedRaise ? 'True' : 'False'}</Text>
+                <Text>Last hand raise valid? {isLastHandRaiseValid ? 'True' : 'False'}</Text>
+                <Text>First Card: {firstCardDeck}; Last Card: {lastCardDeck}</Text>
+                <Text>Rank: {rank}; Suit: {suit}</Text>
+                <Text>Game prize: {gamePrize}</Text>
+                <Text>Game Number: {gameNumber}</Text>
+            </View>) : null}
+            <View style={styles.cardsContainer}>
+                <FlatList
+                    data={handPlayerA}
+                    renderItem={mapCards}
+                    keyExtractor={card => card.toString()}
+                    horizontal={true}
+                />
+            </View>
         </View>
     )
 }
@@ -72,5 +91,40 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white'
-    }
+    },
+    debug: {
+        flex: 1,
+    },
+    upperContainer: {
+        flex: 1,
+        flexDirection: 'row'
+    },
+    infoContainer: {
+        flex: 1,
+    },
+    playedCardContainer: {
+        flex: 2,
+    },
+    raiseContainer: {
+        flex: 1,
+    },
+    cardsContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        backgroundColor: 'white'
+    },
 })
+
+const moves = {
+    playCard: [...Array(33).keys()],
+    pickRank: [...Array(9).keys()].map(i => i + 33),
+    pickSuit: [...Array(4).keys()].map(i => i + 42),
+    raisePoints: 46,
+    foldHand: 47,
+    acceptRaise: 48,
+    foldHandAndShowValidRaise: 49
+}
+
+const rankNames = ['7', '8', '9', '10', 'Unter', 'Ober', 'Koenig', 'Ass', 'Weli', '-']
+
+const suitNames = ['laab', 'herz', 'oachl', 'schell', '-']

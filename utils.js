@@ -5,3 +5,16 @@ export function shuffleArray(array) {
     }
     return array
 }
+
+export function getRankAndSuit(id) {
+    if (id > 32) {
+        console.warn('Card ID can\'t be greater than 32')
+        return [9, 4]
+    } else if (id === 32) {
+        return [8, 3]
+    } else {
+        const s = Math.floor(id/8)
+        const r = id - 8*s
+        return [r, s]
+    }
+}
