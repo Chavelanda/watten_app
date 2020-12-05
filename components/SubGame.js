@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {View, StyleSheet, Text, FlatList} from 'react-native';
 import {getCardName, getRankAndSuit, rankNames, shuffleArray, suitNames} from "../utils";
-import {Button, Overlay} from "react-native-elements";
-import Move from "./Move";
+import {Button} from "react-native-elements";
+import WattenCard from "./WattenCard";
 import SubGameInfo from "./SubGameInfo";
 import RankSuitChoice from "./RankSuitChoice";
 
@@ -10,7 +10,7 @@ const debug=false
 
 export default function SubGame({initGamePrize, gameNumber}) {
 
-    const [currentPlayer, setCurrentPlayer] = useState(1)
+    const [humanStarting, setHumanStarting] = useState(true)
     const [distributingCardPlayer, setDistributingCardPlayer] = useState(-1)
     const [deck, setDeck] = useState([]);
     const [handPlayerA, setHandPlayerA] = useState([])
@@ -34,7 +34,7 @@ export default function SubGame({initGamePrize, gameNumber}) {
     // Used to initialize the game
     useEffect(() => {
         initSubGame()
-        prepareTurn()
+        prepareTurn(!humanStarting)
     }, [gameNumber])
 
     const initSubGame = () => {
@@ -55,8 +55,8 @@ export default function SubGame({initGamePrize, gameNumber}) {
         setGamePrize(initGamePrize)
     }
 
-    const prepareTurn = () => {
-        if (currentPlayer === -1) {
+    const prepareTurn = (aiTurn) => {
+        if (aiTurn) {
             setValidMoves([...Array(38).fill(false)])
             doAITurn()
         } else {
@@ -132,17 +132,97 @@ export default function SubGame({initGamePrize, gameNumber}) {
     }
 
     const mapCards = ({item}) => (
-        <Move key={item} actionName={getCardName(getRankAndSuit(item))} actionId={item} isValid={validMoves[item]}/>
+        <WattenCard key={item} actionName={getCardName(getRankAndSuit(item))} actionId={item} isValid={validMoves[item]}/>
     )
 
-    const onRankChosen = (rank) => {
-        console.log('Rank is ' + rankNames[rank])
+    const onRankChosen = (rank, nextTurnAi=true) => {
+        setRank(rank)
         setChooseRank(false)
+        prepareTurn(nextTurnAi)
     }
 
-    const onSuitChosen = (suit) => {
-        console.log('Suit is ' + suitNames[rank])
+    const onSuitChosen = (suit, nextTurnAi=true) => {
+        setSuit(suit)
         setChooseSuit(false)
+        prepareTurn(nextTurnAi)
+    }
+
+    const onRaise = (nextTurnAi=true) => {
+        setIsLastMoveRaise(true)
+        if (playedCards.length >= 8) {
+            setIsLastHandRaiseValid(checkLastHandRaiseValid(nextTurnAi))
+        }
+        setGamePrize(gamePrize+1)
+        prepareTurn(nextTurnAi)
+    }
+
+    const checkLastHandRaiseValid = (isPlayerA) => {
+        const lastCard = isPlayerA ? handPlayerA[0] : handPlayerB[0]
+        const lastCardRS = getRankAndSuit(lastCard)
+        if (isTrumpf(lastCardRS[0], lastCardRS[1])) {
+            return true
+        } else if (playedCards.length === 9) {
+            const lastPlayedCard = playedCards.slice(-1)[0]
+            const lpcRS = getRankAndSuit(lastPlayedCard)
+            return lastCardRS[1] === lpcRS[1] || (!compareCards(lastPlayedCard, lastCard));
+        } else {
+            return false
+        }
+    }
+
+    const isRechte = (r, s) => {
+        return ((r === 8 && rank === 8) || (r === rank && s === suit))
+    }
+
+    const isBlinde = (r) => {
+        return r === rank
+    }
+
+    const isTrumpf = (r, s) => {
+        if (isRechte(r, s)) {
+            return false
+        } else {
+            return (s === suit)
+        }
+    }
+
+    // returns true if the first card wins over the second
+    // firstPlayed should be the card already on the table
+    const compareCards = (firstPlayed, secondPlayed) => {
+        const fRS = getRankAndSuit(firstPlayed)
+        const sRS = getRankAndSuit(secondPlayed)
+
+        if (isRechte(fRS[0], fRS[1])) {
+            return true
+        } else if (isRechte(sRS[0], sRS[1])) {
+            return false
+        } else if (isBlinde(fRS[0])) {
+            return true
+        } else if (isBlinde(sRS[0])){
+            return false
+        } else if (isTrumpf(fRS[0], fRS[1])){
+            if (isTrumpf(sRS[0], sRS[1])) {
+                return isRankHigher(fRS[0], sRS[0])
+            } else {
+                return true
+            }
+        } else if (sRS[1] === suit) {
+            return false
+        } else if (fRS[1] !== sRS[1]) {
+            return true
+        } else {
+            return isRankHigher(fRS[0], sRS[0])
+        }
+    }
+
+    const isRankHigher = (r1, r2) => {
+        if (r1 === 8) {
+            return false
+        } else if (r2 === 8) {
+            return true
+        } else {
+            return r1 > r2
+        }
     }
 
     return (
@@ -161,10 +241,10 @@ export default function SubGame({initGamePrize, gameNumber}) {
                         </View>
                         ) : null
                     }
-                    {isLastMoveRaise && currentPlayer === 1 ? <Text>AI raised!</Text> : null}
+                    {isLastMoveRaise ? <Text>Raised!</Text> : null}
                 </View>
                 <View style={styles.buttonsContainer}>
-                    {validMoves[35] ? <Button title='Raise Prize' onPress={() => console.log('raise')} type='outline' raised/> : null}
+                    {validMoves[35] ? <Button title='Raise Prize' onPress={() => onRaise()} type='outline' raised/> : null}
                     {validMoves[37] ? <Button title='Accept Raise' onPress={() => console.log('accept raise')} type='outline' raised/> : null}
                     {validMoves[36] ? <Button title='Fold Hand' onPress={() => console.log('fold hand')} type='outline' raised/> : null}
                     {validMoves[38] ? <Button title='Show valid raise' onPress={() => console.log('fold hand and show valid raise')}

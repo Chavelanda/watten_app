@@ -2,7 +2,7 @@ import React from "react";
 import {Card} from "react-native-elements";
 import {TouchableHighlight, View, StyleSheet} from "react-native";
 
-export default function Move({actionName, actionId, isValid}) {
+export default function WattenCard({actionName, actionId, isValid}) {
 
     return (
         <View style={styles.container}>

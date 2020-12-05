@@ -5,7 +5,7 @@ import {Button, Overlay} from "react-native-elements";
 export default function RankSuitChoice ({visible, setVisible, title, list, action}) {
 
     const mapList = (str, id) => (
-        <Button title={str} type='clear' onPress={() => action(id)}/>
+        <Button key={id} title={str} type='clear' onPress={() => action(id)}/>
     )
 
     return (
