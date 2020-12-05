@@ -4,8 +4,6 @@ import SubGame from "./SubGame";
 
 export default function Game({gen}) {
 
-    const [currentPlayer, setCurrentPlayer] = useState(1)
-    const [distributingCardPlayer, setDistributingCardPlayer] = useState(-1)
     const [scorePlayerA, setScorePlayerA] = useState(0)
     const [scorePlayerB, setScorePlayerB] = useState(0)
     const [winningPlayer, setWinningPlayer] = useState(null)

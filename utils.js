@@ -18,3 +18,22 @@ export function getRankAndSuit(id) {
         return [r, s]
     }
 }
+
+export function getCardName (rs) {
+    return rankNames[rs[0]] + ' of ' + suitNames[rs[1]]
+}
+
+export const moves = {
+    playCard: [...Array(33).keys()],
+    pickRank: [...Array(9).keys()].map(i => i + 33),
+    pickSuit: [...Array(4).keys()].map(i => i + 42),
+    raisePoints: 46,
+    foldHand: 47,
+    acceptRaise: 48,
+    foldHandAndShowValidRaise: 49
+}
+
+const rankNames = ['7', '8', '9', '10', 'Unter', 'Ober', 'Koenig', 'Ass', 'Weli', '-']
+
+const suitNames = ['laab', 'herz', 'oachl', 'schell', '-']
+

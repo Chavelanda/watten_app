@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import {View, StyleSheet, Text, FlatList} from 'react-native';
-import {getRankAndSuit, shuffleArray} from "../utils";
+import {getCardName, getRankAndSuit, shuffleArray} from "../utils";
+import {Button} from "react-native-elements";
 import Move from "./Move";
+
+const debug=false
 
 export default function SubGame({initGamePrize, gameNumber}) {
 
+    const [currentPlayer, setCurrentPlayer] = useState(1)
+    const [distributingCardPlayer, setDistributingCardPlayer] = useState(-1)
     const [deck, setDeck] = useState([]);
     const [handPlayerA, setHandPlayerA] = useState([])
     const [handPlayerB, setHandPlayerB] = useState([])
@@ -38,43 +43,76 @@ export default function SubGame({initGamePrize, gameNumber}) {
         setGamePrize(initGamePrize)
     }
 
+    const prepareTurn = () => {
+        if (currentPlayer === -1) {
+            doAITurn()
+        } else {
+            console.log('preparing turn')
+        }
+    }
+
+    const doAITurn = () => {
+        console.log('doing AI turn')
+    }
+
     // Used to initialize the game
     useEffect(() => {
         initSubGame()
+        prepareTurn()
     }, [gameNumber])
 
-
-    const mapDebug = (card) => (
-        <Text key={card}>{card} - </Text>
-    )
-
-    const mapCards = ({item}) => {
-        const rs = getRankAndSuit(item)
-
-        const name = rankNames[rs[0]] + ' of ' + suitNames[rs[1]]
-
-        return (
-            <Move key={item} actionName={name} actionId={item}/>
-        )
+    const printDebug = () =>{
+        console.log('Deck: ' + deck)
+        console.log('Player A hand: ' + handPlayerA)
+        console.log('Player B hand: ' + handPlayerB)
+        console.log('Played cards: ' + playedCards)
+        console.log('Score A: ' + scorePlayerA)
+        console.log('Score B: ' + scorePlayerB)
+        console.log('Last move raise? ' + isLastMoveRaise)
+        console.log('Last move accepted raise? ' + isLastMoveAcceptedRaise)
+        console.log('Last hand raise valid?' + isLastHandRaiseValid)
+        console.log('First Card: ' + firstCardDeck + '; Last Card: '+ lastCardDeck)
+        console.log('Rank: ' + rank + '; Suit: ' + suit)
+        console.log('Game prize: ' + gamePrize)
+        console.log('Game Number: ' + gameNumber)
+        console.log('CurrentPlayer: ' + currentPlayer)
+        console.log('Distributing card: ' + distributingCardPlayer)
     }
+
+    const mapCards = ({item}) => (
+        <Move key={item} actionName={getCardName(getRankAndSuit(item))} actionId={item}/>
+)
 
     return (
         <View style={styles.container}>
-            {false ? (<View style={styles.debug}>
-                <Text>Deck: {deck.map(mapDebug)}</Text>
-                <Text>Player A hand: {handPlayerA.map(mapDebug)}</Text>
-                <Text>Player B hand: {handPlayerB.map(mapDebug)}</Text>
-                <Text>Played cards: {playedCards}</Text>
-                <Text>Score A: {scorePlayerA}</Text>
-                <Text>Score B: {scorePlayerB}</Text>
-                <Text>Last move raise? {isLastMoveRaise ? 'True' : 'False'}</Text>
-                <Text>Last move accepted raise? {isLastMoveAcceptedRaise ? 'True' : 'False'}</Text>
-                <Text>Last hand raise valid? {isLastHandRaiseValid ? 'True' : 'False'}</Text>
-                <Text>First Card: {firstCardDeck}; Last Card: {lastCardDeck}</Text>
-                <Text>Rank: {rank}; Suit: {suit}</Text>
-                <Text>Game prize: {gamePrize}</Text>
-                <Text>Game Number: {gameNumber}</Text>
-            </View>) : null}
+            {debug ? printDebug() : null}
+            <View style={styles.upperContainer}>
+                <View style={styles.infoContainer}>
+                    <Text>You {scorePlayerA}</Text>
+                    <Text>AI {scorePlayerB}</Text>
+                    <Text>Prize {gamePrize}</Text>
+                    <Text>First Card {getCardName(getRankAndSuit(firstCardDeck))}</Text>
+                    {distributingCardPlayer === 1 ? <Text>Last Card {getCardName(getRankAndSuit(lastCardDeck))}</Text> : null}
+                    {rank ? <Text>Rank {rank}</Text> : null}
+                    {suit ? <Text>Suit {suit}</Text>: null}
+                </View>
+                <View style={styles.playedCardContainer}>
+                    {playedCards.length % 2 === 1 ? (
+                        <View style={styles.playedCardContainer}>
+                            <Text>Card on the table</Text>
+                            {mapCards({item: playedCards.slice(-1)[0]})}
+                        </View>
+                        ) : null
+                    }
+                    {isLastMoveRaise && currentPlayer === 1 ? <Text>AI raised!</Text> : null}
+                </View>
+                <View style={styles.raiseContainer}>
+                    <Button title='Raise Prize' onPress={() => console.log('raise')} type='outline' raised/>
+                    <Button title='Accept Raise' onPress={() => console.log('accept raise')} type='outline' raised/>
+                    <Button title='Fold Hand' onPress={() => console.log('fold hand')} type='outline' raised/>
+                    <Button title='Show valid raise' onPress={() => console.log('fold hand and show valid raise')} type='outline' raised/>
+                </View>
+            </View>
             <View style={styles.cardsContainer}>
                 <FlatList
                     data={handPlayerA}
@@ -101,12 +139,19 @@ const styles = StyleSheet.create({
     },
     infoContainer: {
         flex: 1,
+        justifyContent: 'space-around',
+        marginLeft: 10,
     },
     playedCardContainer: {
         flex: 2,
+        alignItems: 'center',
+        justifyContent: 'space-around'
     },
     raiseContainer: {
         flex: 1,
+        marginRight: 10,
+        alignItems: 'flex-end',
+        justifyContent: 'space-around'
     },
     cardsContainer: {
         flex: 1,
@@ -115,16 +160,3 @@ const styles = StyleSheet.create({
     },
 })
 
-const moves = {
-    playCard: [...Array(33).keys()],
-    pickRank: [...Array(9).keys()].map(i => i + 33),
-    pickSuit: [...Array(4).keys()].map(i => i + 42),
-    raisePoints: 46,
-    foldHand: 47,
-    acceptRaise: 48,
-    foldHandAndShowValidRaise: 49
-}
-
-const rankNames = ['7', '8', '9', '10', 'Unter', 'Ober', 'Koenig', 'Ass', 'Weli', '-']
-
-const suitNames = ['laab', 'herz', 'oachl', 'schell', '-']
