@@ -156,6 +156,12 @@ export default function SubGame({initGamePrize, gameNumber}) {
         prepareTurn(nextTurnAi)
     }
 
+    const onAcceptRaise = (nextTurnAI=true) => {
+        setIsLastMoveAcceptedRaise(true)
+        setIsLastMoveRaise(false)
+        prepareTurn(nextTurnAI)
+    }
+
     const checkLastHandRaiseValid = (isPlayerA) => {
         const lastCard = isPlayerA ? handPlayerA[0] : handPlayerB[0]
         const lastCardRS = getRankAndSuit(lastCard)
@@ -245,7 +251,7 @@ export default function SubGame({initGamePrize, gameNumber}) {
                 </View>
                 <View style={styles.buttonsContainer}>
                     {validMoves[35] ? <Button title='Raise Prize' onPress={() => onRaise()} type='outline' raised/> : null}
-                    {validMoves[37] ? <Button title='Accept Raise' onPress={() => console.log('accept raise')} type='outline' raised/> : null}
+                    {validMoves[37] ? <Button title='Accept Raise' onPress={() => onAcceptRaise()} type='outline' raised/> : null}
                     {validMoves[36] ? <Button title='Fold Hand' onPress={() => console.log('fold hand')} type='outline' raised/> : null}
                     {validMoves[38] ? <Button title='Show valid raise' onPress={() => console.log('fold hand and show valid raise')}
                              type='outline' raised/> : null}
