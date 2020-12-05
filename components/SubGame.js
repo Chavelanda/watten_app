@@ -4,6 +4,7 @@ import {getCardName, getRankAndSuit, rankNames, shuffleArray, suitNames} from ".
 import {Button, Overlay} from "react-native-elements";
 import Move from "./Move";
 import SubGameInfo from "./SubGameInfo";
+import RankSuitChoice from "./RankSuitChoice";
 
 const debug=false
 
@@ -134,18 +135,10 @@ export default function SubGame({initGamePrize, gameNumber}) {
         <Move key={item} actionName={getCardName(getRankAndSuit(item))} actionId={item} isValid={validMoves[item]}/>
     )
 
-    const mapRankChoice = (rankStr, rankId) => (
-        <Button title={rankStr} type='clear' onPress={() => onRankChosen(rankId)}/>
-    )
-
     const onRankChosen = (rank) => {
         console.log('Rank is ' + rankNames[rank])
         setChooseRank(false)
     }
-
-    const mapSuitChoice = (suitStr, suitId) => (
-        <Button title={suitStr} type='clear' onPress={() => onSuitChosen(suitId)}/>
-    )
 
     const onSuitChosen = (suit) => {
         console.log('Suit is ' + suitNames[rank])
@@ -189,18 +182,8 @@ export default function SubGame({initGamePrize, gameNumber}) {
                 />
             </View>
 
-            <Overlay overlayStyle={styles.overlay} isVisible={chooseRank} onBackdropPress={() => setChooseRank(false)}>
-                <View style={styles.choice}>
-                    <Text style={{alignSelf: 'center'}}>Choose Rank</Text>
-                    {rankNames.slice(0,-1).map(mapRankChoice)}
-                </View>
-            </Overlay>
-            <Overlay isVisible={chooseSuit} onBackdropPress={() => setChooseSuit(false)}>
-                <View style={styles.choice}>
-                    <Text style={{alignSelf: 'center'}}>Choose Suit</Text>
-                    {suitNames.slice(0,-1).map(mapSuitChoice)}
-                </View>
-            </Overlay>
+            <RankSuitChoice visible={chooseRank} setVisible={setChooseRank} title='Choose Rank' list={rankNames.slice(0,-1)} action={onRankChosen}/>
+            <RankSuitChoice visible={chooseSuit} setVisible={setChooseSuit} title='Choose Suit' list={suitNames.slice(0,-1)} action={onSuitChosen}/>
         </View>
     )
 }
@@ -235,15 +218,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         backgroundColor: 'white'
-    },
-    overlay: {
-        flex: 1,
-        margin: 10,
-        width: '50%'
-    },
-    choice: {
-        flex: 1,
-        justifyContent: 'space-around',
     }
 })
 
