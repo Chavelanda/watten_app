@@ -2,12 +2,12 @@ import React from "react";
 import {Card} from "react-native-elements";
 import {TouchableHighlight, View, StyleSheet} from "react-native";
 
-export default function Move({actionName, actionId}) {
+export default function Move({actionName, actionId, isValid}) {
 
     return (
         <View style={styles.container}>
             <Card containerStyle={styles.cardContainer} wrapperStyle={styles.cardWrapper}>
-                <TouchableHighlight style={styles.cardWrapper} onPress={() => console.log('pressed ' + actionId)} activeOpacity={0.3} underlayColor='white'>
+                <TouchableHighlight disabled={!isValid} style={styles.cardWrapper} onPress={() => console.log('pressed ' + actionId)} activeOpacity={0.3} underlayColor='white'>
                     <Card.Title>{actionName}</Card.Title>
                 </TouchableHighlight>
             </Card>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {View, StyleSheet, Text, FlatList} from 'react-native';
 import {getCardName, getRankAndSuit, shuffleArray} from "../utils";
-import {Button} from "react-native-elements";
+import {Button, Overlay} from "react-native-elements";
 import Move from "./Move";
 
 const debug=false
@@ -20,10 +20,14 @@ export default function SubGame({initGamePrize, gameNumber}) {
     const [isLastMoveAcceptedRaise, setIsLastMoveAcceptedRaise] = useState(false)
     const [isLastHandRaiseValid, setIsLastHandRaiseValid] = useState(null)
     const [rank, setRank] = useState(null)
+    const [chooseRank, setChooseRank] = useState(false)
     const [suit, setSuit] = useState(null)
+    const [chooseSuit, setChooseSuit] = useState(false)
     const [gamePrize, setGamePrize] = useState(0)
     const [firstCardDeck, setFirstCardDeck] = useState(0)
     const [lastCardDeck, setLastCardDeck] = useState(0)
+    // 0-33 for each card, 33 rank, 34 suit, 35 raise, 36 fold, 37 accept raise, 38 fold and show valid raise
+    const [validMoves, setValidMoves] = useState([...Array(38).fill(false)])
 
     const initSubGame = () => {
         const newDeck = shuffleArray([...Array(33).keys()])
@@ -45,11 +49,62 @@ export default function SubGame({initGamePrize, gameNumber}) {
 
     const prepareTurn = () => {
         if (currentPlayer === -1) {
+            setValidMoves([...Array(38).fill(false)])
             doAITurn()
         } else {
-            console.log('preparing turn')
+            setValidMoves(getValidMoves())
         }
     }
+
+    const getValidMoves = () => {
+        const valid = [...Array(38).fill(0)]
+
+        if (isLastMoveRaise && (!isLastMoveAcceptedRaise)){
+            valid[36] = true
+            valid[37] = true
+            if (isLastHandRaiseValid !== null) {
+                valid[38] = true
+            }
+        } else if (rank === null) {
+            valid[33] = true
+            valid[35] = true
+        } else if (suit === null){
+            valid[34] = true
+            valid[35] = true
+        } else if (playedCards.length % 2 === 0) {
+            handPlayerA.forEach((val) => valid[val] = true)
+            valid[35] = true
+        } else {
+            const playedRS = getRankAndSuit(playedCards.slice(-1)[0])
+            handPlayerA.forEach((id) => canPlayCard(id, playedRS) ? valid[id] = true : valid[id] = false)
+            if (valid.reduce((acc, val) => val ? acc + 1 : acc) === 1) {
+                const id = valid.indexOf(true)
+                const rs = getRankAndSuit(id)
+                if (rs[0] === rank && rs[1] === suit) {
+                    handPlayerA.forEach((val) => valid[val] = true)
+                }
+            } else if (valid.reduce((acc, val) => val ? acc + 1 : acc) === 0){
+                handPlayerA.forEach((val) => valid[val] = true)
+            }
+            valid[35] = true
+        }
+        console.log(valid)
+        return valid
+    }
+
+    const canPlayCard = (id, pRS) => {
+        const cRS = getRankAndSuit(id)
+        if (pRS[1] === suit && cRS[1] === pRS[1]){
+            return true
+        } else if (cRS[0] === rank){
+            return true
+        } else if (pRS[1] !== suit) {
+            return true
+        } else {
+            return false
+        }
+    }
+
 
     const doAITurn = () => {
         console.log('doing AI turn')
@@ -80,7 +135,7 @@ export default function SubGame({initGamePrize, gameNumber}) {
     }
 
     const mapCards = ({item}) => (
-        <Move key={item} actionName={getCardName(getRankAndSuit(item))} actionId={item}/>
+        <Move key={item} actionName={getCardName(getRankAndSuit(item))} actionId={item} isValid={validMoves[item]}/>
 )
 
     return (
@@ -106,11 +161,14 @@ export default function SubGame({initGamePrize, gameNumber}) {
                     }
                     {isLastMoveRaise && currentPlayer === 1 ? <Text>AI raised!</Text> : null}
                 </View>
-                <View style={styles.raiseContainer}>
-                    <Button title='Raise Prize' onPress={() => console.log('raise')} type='outline' raised/>
-                    <Button title='Accept Raise' onPress={() => console.log('accept raise')} type='outline' raised/>
-                    <Button title='Fold Hand' onPress={() => console.log('fold hand')} type='outline' raised/>
-                    <Button title='Show valid raise' onPress={() => console.log('fold hand and show valid raise')} type='outline' raised/>
+                <View style={styles.buttonsContainer}>
+                    {validMoves[35] ? <Button title='Raise Prize' onPress={() => console.log('raise')} type='outline' raised/> : null}
+                    {validMoves[37] ? <Button title='Accept Raise' onPress={() => console.log('accept raise')} type='outline' raised/> : null}
+                    {validMoves[36] ? <Button title='Fold Hand' onPress={() => console.log('fold hand')} type='outline' raised/> : null}
+                    {validMoves[38] ? <Button title='Show valid raise' onPress={() => console.log('fold hand and show valid raise')}
+                             type='outline' raised/> : null}
+                    {validMoves[33] ? <Button title='Select Rank' onPress={() => setChooseRank(true)} type='outline' raised/> : null}
+                    {validMoves[34] ? <Button title='Select Suit' onPress={() => setChooseSuit(true)} type='outline' raised/> : null}
                 </View>
             </View>
             <View style={styles.cardsContainer}>
@@ -121,6 +179,13 @@ export default function SubGame({initGamePrize, gameNumber}) {
                     horizontal={true}
                 />
             </View>
+
+            <Overlay isVisible={chooseRank} onBackdropPress={() => setChooseRank(false)}>
+                <Text>Choose Rank</Text>
+            </Overlay>
+            <Overlay isVisible={chooseSuit} onBackdropPress={() => setChooseSuit(false)}>
+                <Text>Choose Suit</Text>
+            </Overlay>
         </View>
     )
 }
@@ -147,7 +212,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around'
     },
-    raiseContainer: {
+    buttonsContainer: {
         flex: 1,
         marginRight: 10,
         alignItems: 'flex-end',
