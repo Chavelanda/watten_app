@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {View, StyleSheet, Text, FlatList} from 'react-native';
-import {getCardName, getRankAndSuit, shuffleArray} from "../utils";
+import {getCardName, getRankAndSuit, rankNames, shuffleArray} from "../utils";
 import {Button, Overlay} from "react-native-elements";
 import Move from "./Move";
+import SubGameInfo from "./SubGameInfo";
 
 const debug=false
 
@@ -28,6 +29,12 @@ export default function SubGame({initGamePrize, gameNumber}) {
     const [lastCardDeck, setLastCardDeck] = useState(0)
     // 0-33 for each card, 33 rank, 34 suit, 35 raise, 36 fold, 37 accept raise, 38 fold and show valid raise
     const [validMoves, setValidMoves] = useState([...Array(38).fill(false)])
+
+    // Used to initialize the game
+    useEffect(() => {
+        initSubGame()
+        prepareTurn()
+    }, [gameNumber])
 
     const initSubGame = () => {
         const newDeck = shuffleArray([...Array(33).keys()])
@@ -98,23 +105,12 @@ export default function SubGame({initGamePrize, gameNumber}) {
             return true
         } else if (cRS[0] === rank){
             return true
-        } else if (pRS[1] !== suit) {
-            return true
-        } else {
-            return false
-        }
+        } else return pRS[1] !== suit;
     }
-
 
     const doAITurn = () => {
         console.log('doing AI turn')
     }
-
-    // Used to initialize the game
-    useEffect(() => {
-        initSubGame()
-        prepareTurn()
-    }, [gameNumber])
 
     const printDebug = () =>{
         console.log('Deck: ' + deck)
@@ -136,20 +132,23 @@ export default function SubGame({initGamePrize, gameNumber}) {
 
     const mapCards = ({item}) => (
         <Move key={item} actionName={getCardName(getRankAndSuit(item))} actionId={item} isValid={validMoves[item]}/>
-)
+    )
+
+    const mapRankChoice = (rankStr, rankId) => (
+        <Button title={rankStr} type='clear' onPress={onRankChosen(rankId)}/>
+    )
+
+    const onRankChosen = (rank) => {
+        console.log('Rank is ' + rankNames[rank])
+    }
 
     return (
         <View style={styles.container}>
             {debug ? printDebug() : null}
             <View style={styles.upperContainer}>
                 <View style={styles.infoContainer}>
-                    <Text>You {scorePlayerA}</Text>
-                    <Text>AI {scorePlayerB}</Text>
-                    <Text>Prize {gamePrize}</Text>
-                    <Text>First Card {getCardName(getRankAndSuit(firstCardDeck))}</Text>
-                    {distributingCardPlayer === 1 ? <Text>Last Card {getCardName(getRankAndSuit(lastCardDeck))}</Text> : null}
-                    {rank ? <Text>Rank {rank}</Text> : null}
-                    {suit ? <Text>Suit {suit}</Text>: null}
+                    <SubGameInfo scorePlayerA={scorePlayerA} scorePlayerB={scorePlayerB} gamePrize={gamePrize} firstCardDeck={firstCardDeck}
+                        distributingCardPlayer={distributingCardPlayer} lastCardDeck={lastCardDeck} rank={rank} suit={suit}/>
                 </View>
                 <View style={styles.playedCardContainer}>
                     {playedCards.length % 2 === 1 ? (
@@ -204,8 +203,6 @@ const styles = StyleSheet.create({
     },
     infoContainer: {
         flex: 1,
-        justifyContent: 'space-around',
-        marginLeft: 10,
     },
     playedCardContainer: {
         flex: 2,
