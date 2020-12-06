@@ -37,3 +37,60 @@ export const rankNames = ['7', '8', '9', '10', 'Unter', 'Ober', 'Koenig', 'Ass',
 
 export const suitNames = ['laab', 'herz', 'oachl', 'schell', '-']
 
+export const isRechte = (r, s, rank, suit) => {
+    return ((r === 8 && rank === 8) || (r === rank && s === suit))
+}
+
+export const isBlinde = (r, rank) => {
+    return r === rank
+}
+
+export const isTrumpf = (r, s, rank, suit) => {
+    if (isRechte(r, s, rank, suit)) {
+        return false
+    } else {
+        return (s === suit)
+    }
+}
+
+export const isRankHigher = (r1, r2) => {
+    if (r1 === 8) {
+        return false
+    } else if (r2 === 8) {
+        return true
+    } else {
+        return r1 > r2
+    }
+}
+
+// returns true if the first card wins over the second
+// firstPlayed should be the card already on the table
+export const compareCards = (firstPlayed, secondPlayed, rank, suit) => {
+    const fRS = getRankAndSuit(firstPlayed)
+    const sRS = getRankAndSuit(secondPlayed)
+
+    if (isRechte(fRS[0], fRS[1], rank, suit)) {
+        return true
+    } else if (isRechte(sRS[0], sRS[1], rank, suit)) {
+        return false
+    } else if (isBlinde(fRS[0], rank)) {
+        return true
+    } else if (isBlinde(sRS[0], rank)){
+        return false
+    } else if (isTrumpf(fRS[0], fRS[1], rank, suit)){
+        if (isTrumpf(sRS[0], sRS[1], rank, suit)) {
+            return isRankHigher(fRS[0], sRS[0])
+        } else {
+            return true
+        }
+    } else if (sRS[1] === suit) {
+        return false
+    } else if (fRS[1] !== sRS[1]) {
+        return true
+    } else {
+        return isRankHigher(fRS[0], sRS[0])
+    }
+}
+
+
+
