@@ -8,10 +8,9 @@ import RankSuitChoice from "./RankSuitChoice";
 
 const debug=false
 
-export default function SubGame({initGamePrize, gameNumber}) {
+export default function SubGame({initGamePrize, gameNumber, onSubGameEnd}) {
 
-    const [humanStarting, setHumanStarting] = useState(true)
-    const [distributingCardPlayer, setDistributingCardPlayer] = useState(-1)
+    const [humanStarting, setHumanStarting] = useState(false)
     const [deck, setDeck] = useState([]);
     const [handPlayerA, setHandPlayerA] = useState([])
     const [handPlayerB, setHandPlayerB] = useState([])
@@ -33,11 +32,13 @@ export default function SubGame({initGamePrize, gameNumber}) {
 
     // Used to initialize the game
     useEffect(() => {
-        initSubGame()
-        prepareTurn(!humanStarting)
+        const hStarts = initSubGame()
+        prepareTurn(!hStarts)
     }, [gameNumber])
 
     const initSubGame = () => {
+        const hStarts = !humanStarting
+        setHumanStarting(!humanStarting)
         const newDeck = shuffleArray([...Array(33).keys()])
         setHandPlayerA(newDeck.slice(-5))
         setHandPlayerB(newDeck.slice(-10, -5))
@@ -53,6 +54,7 @@ export default function SubGame({initGamePrize, gameNumber}) {
         setRank(null)
         setSuit(null)
         setGamePrize(initGamePrize)
+        return hStarts
     }
 
     const prepareTurn = (aiTurn) => {
@@ -127,8 +129,6 @@ export default function SubGame({initGamePrize, gameNumber}) {
         console.log('Rank: ' + rank + '; Suit: ' + suit)
         console.log('Game prize: ' + gamePrize)
         console.log('Game Number: ' + gameNumber)
-        console.log('CurrentPlayer: ' + currentPlayer)
-        console.log('Distributing card: ' + distributingCardPlayer)
     }
 
     const mapCards = ({item}) => (
@@ -160,6 +160,13 @@ export default function SubGame({initGamePrize, gameNumber}) {
         setIsLastMoveAcceptedRaise(true)
         setIsLastMoveRaise(false)
         prepareTurn(nextTurnAI)
+    }
+
+    const onFold = (nextTurnAi=true) => {
+        const score = gamePrize - 1
+        isLastHandRaiseValid === null || isLastHandRaiseValid ?
+            onSubGameEnd(!nextTurnAi, score) :
+            onSubGameEnd(nextTurnAi, score)
     }
 
     const checkLastHandRaiseValid = (isPlayerA) => {
@@ -237,7 +244,7 @@ export default function SubGame({initGamePrize, gameNumber}) {
             <View style={styles.upperContainer}>
                 <View style={styles.infoContainer}>
                     <SubGameInfo scorePlayerA={scorePlayerA} scorePlayerB={scorePlayerB} gamePrize={gamePrize} firstCardDeck={firstCardDeck}
-                        distributingCardPlayer={distributingCardPlayer} lastCardDeck={lastCardDeck} rank={rank} suit={suit}/>
+                        humanStarting={humanStarting} lastCardDeck={lastCardDeck} rank={rank} suit={suit}/>
                 </View>
                 <View style={styles.playedCardContainer}>
                     {playedCards.length % 2 === 1 ? (
@@ -252,8 +259,8 @@ export default function SubGame({initGamePrize, gameNumber}) {
                 <View style={styles.buttonsContainer}>
                     {validMoves[35] ? <Button title='Raise Prize' onPress={() => onRaise()} type='outline' raised/> : null}
                     {validMoves[37] ? <Button title='Accept Raise' onPress={() => onAcceptRaise()} type='outline' raised/> : null}
-                    {validMoves[36] ? <Button title='Fold Hand' onPress={() => console.log('fold hand')} type='outline' raised/> : null}
-                    {validMoves[38] ? <Button title='Show valid raise' onPress={() => console.log('fold hand and show valid raise')}
+                    {validMoves[36] ? <Button title='Fold Hand' onPress={() => onFold()} type='outline' raised/> : null}
+                    {validMoves[38] ? <Button title='Show valid raise' onPress={() => onFold()}
                              type='outline' raised/> : null}
                     {validMoves[33] ? <Button title='Select Rank' onPress={() => setChooseRank(true)} type='outline' raised/> : null}
                     {validMoves[34] ? <Button title='Select Suit' onPress={() => setChooseSuit(true)} type='outline' raised/> : null}

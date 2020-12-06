@@ -14,6 +14,19 @@ export default function Game({gen}) {
         return (winThreshold - scorePlayerA <= 2 || winThreshold - scorePlayerB <= 2) ? (scorePlayerA < 10 || scorePlayerB < 10) ? 4 : 3 : 2
     }
 
+    const onSubGameEnd = (winsPlayerA, score) => {
+        const points = winsPlayerA ? scorePlayerA+score : scorePlayerB+score
+        winsPlayerA ? setScorePlayerA(scorePlayerA+score) : setScorePlayerB(scorePlayerB+score)
+        checkWin(winsPlayerA, points)
+    }
+
+    const checkWin = (winsPlayerA, score) => {
+        if (score > 14) {
+            winsPlayerA ? setWinningPlayer(1) : setWinningPlayer(-1)
+        } else {
+            setGameNumber(gameNumber+1)
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -27,7 +40,7 @@ export default function Game({gen}) {
                 </View>
             </View>
             <View style={styles.subGameContainer}>
-                <SubGame initGamePrize={initGamePrize} gameNumber={gameNumber}/>
+                <SubGame initGamePrize={initGamePrize} gameNumber={gameNumber} onSubGameEnd={onSubGameEnd}/>
             </View>
         </View>
     )
