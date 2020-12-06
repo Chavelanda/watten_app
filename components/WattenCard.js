@@ -2,12 +2,12 @@ import React from "react";
 import {Card} from "react-native-elements";
 import {TouchableHighlight, View, StyleSheet} from "react-native";
 
-export default function WattenCard({actionName, actionId, isValid}) {
+export default function WattenCard({actionName, actionId, isValid, onCardPressed}) {
 
     return (
         <View style={styles.container}>
             <Card containerStyle={styles.cardContainer} wrapperStyle={styles.cardWrapper}>
-                <TouchableHighlight disabled={!isValid} style={styles.cardWrapper} onPress={() => console.log('pressed ' + actionId)} activeOpacity={0.3} underlayColor='white'>
+                <TouchableHighlight disabled={!isValid} style={styles.cardWrapper} onPress={() => onCardPressed(actionId)} activeOpacity={0.3} underlayColor='white'>
                     <Card.Title>{actionName}</Card.Title>
                 </TouchableHighlight>
             </Card>

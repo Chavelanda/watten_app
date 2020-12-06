@@ -48,7 +48,7 @@ export default function SubGame({initGamePrize, gameNumber, onSubGameEnd}) {
     const initSubGame = () => {
         const hStarts = !humanStarting
         setHumanStarting(!humanStarting)
-        setNextTurnAI(hStarts)
+        setNextTurnAI(!hStarts)
         const newDeck = shuffleArray([...Array(33).keys()])
         setHandPlayerA(newDeck.slice(-5))
         setHandPlayerB(newDeck.slice(-10, -5))
@@ -145,10 +145,12 @@ export default function SubGame({initGamePrize, gameNumber, onSubGameEnd}) {
     }
 
     const mapCards = ({item}) => (
-        <WattenCard key={item} actionName={getCardName(getRankAndSuit(item))} actionId={item} isValid={validMoves[item]}/>
+        <WattenCard key={item} actionName={getCardName(getRankAndSuit(item))} actionId={item} isValid={validMoves[item]} onCardPressed={playCard}/>
     )
 
     const onRankChosen = (rank, nextAI=true) => {
+        setIsLastMoveRaise(false)
+        setIsLastMoveAcceptedRaise(false)
         setRank(rank)
         setChooseRank(false)
         setNextTurnAI(nextAI)
@@ -156,6 +158,8 @@ export default function SubGame({initGamePrize, gameNumber, onSubGameEnd}) {
     }
 
     const onSuitChosen = (suit, nextAI=true) => {
+        setIsLastMoveRaise(false)
+        setIsLastMoveAcceptedRaise(false)
         setSuit(suit)
         setChooseSuit(false)
         setNextTurnAI(nextAI)
@@ -165,7 +169,7 @@ export default function SubGame({initGamePrize, gameNumber, onSubGameEnd}) {
     const onRaise = (nextAI=true) => {
         setIsLastMoveRaise(true)
         if (playedCards.length >= 8) {
-            setIsLastHandRaiseValid(checkLastHandRaiseValid(nextTurnAi))
+            setIsLastHandRaiseValid(checkLastHandRaiseValid(nextAI))
         }
         setGamePrize(gamePrize+1)
         setNextTurnAI(nextAI)
@@ -185,6 +189,59 @@ export default function SubGame({initGamePrize, gameNumber, onSubGameEnd}) {
             onSubGameEnd(!nextAI, score) :
             onSubGameEnd(nextAI, score)
     }
+
+    const playCard = (card, nextAI=true) => {
+        setIsLastMoveRaise(false)
+        setIsLastMoveAcceptedRaise(false)
+        if (nextAI) {
+            setHandPlayerA([...handPlayerA.splice(handPlayerA.indexOf(card), 1)])
+        } else {
+            setHandPlayerB([...handPlayerB.splice(handPlayerB.indexOf(card), 1)])
+        }
+
+        if(isLastHandRaiseValid !== null && !isLastHandRaiseValid) {
+            onSubGameEnd(!nextAI, gamePrize)
+        } else {
+            if (playedCards.length % 2 === 0) {
+                setPlayedCards([...playedCards.push(card)])
+                setNextTurnAI(nextAI)
+                setTurn(turn + 1)
+            } else {
+                const lastPlayedCard = playedCards.slice(-1)[0]
+                setPlayedCards([...playedCards.push(card)])
+                const currentPlayerWins = !compareCards(lastPlayedCard, card)
+                if (currentPlayerWins) {
+                    nextAI ? setScorePlayerA(scorePlayerA+1) : setScorePlayerB(scorePlayerB+1)
+                } else {
+                    !nextAI ? setScorePlayerA(scorePlayerA+1) : setScorePlayerB(scorePlayerB+1)
+                }
+
+            }
+        }
+
+    }
+    // check if sub game ends when score changes
+    useEffect(() => {
+        if (scorePlayerA !== 0) {
+            if (scorePlayerA >= 3) {
+                onSubGameEnd(true, gamePrize)
+            } else {
+                setNextTurnAI(false)
+                setTurn(turn + 1)
+            }
+        }
+    }, [scorePlayerA])
+
+    useEffect(() => {
+        if (scorePlayerB !== 0) {
+            if (scorePlayerB >= 3) {
+                onSubGameEnd(false, gamePrize)
+            } else {
+                setNextTurnAI(true)
+                setTurn(turn + 1)
+            }
+        }
+    }, [scorePlayerB])
 
     const checkLastHandRaiseValid = (isPlayerA) => {
         const lastCard = isPlayerA ? handPlayerA[0] : handPlayerB[0]
