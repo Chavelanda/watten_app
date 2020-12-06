@@ -10,6 +10,7 @@ const debug=false
 
 export default function SubGame({initGamePrize, gameNumber, onSubGameEnd}) {
 
+    //like distributing card player
     const [humanStarting, setHumanStarting] = useState(false)
     const [deck, setDeck] = useState([]);
     const [handPlayerA, setHandPlayerA] = useState([])
@@ -28,17 +29,26 @@ export default function SubGame({initGamePrize, gameNumber, onSubGameEnd}) {
     const [firstCardDeck, setFirstCardDeck] = useState(0)
     const [lastCardDeck, setLastCardDeck] = useState(0)
     // 0-33 for each card, 33 rank, 34 suit, 35 raise, 36 fold, 37 accept raise, 38 fold and show valid raise
-    const [validMoves, setValidMoves] = useState([...Array(38).fill(false)])
+    const [validMoves, setValidMoves] = useState([...Array(39).fill(false)])
+    const [turn, setTurn] = useState(0)
+    //like current player
+    const [nextTurnAI, setNextTurnAI] = useState(false)
 
     // Used to initialize the game
     useEffect(() => {
-        const hStarts = initSubGame()
-        prepareTurn(!hStarts)
+        initSubGame()
+        setTurn(0)
     }, [gameNumber])
+
+    //At each new turn
+    useEffect(() => {
+        prepareTurn(nextTurnAI)
+    }, [turn])
 
     const initSubGame = () => {
         const hStarts = !humanStarting
         setHumanStarting(!humanStarting)
+        setNextTurnAI(hStarts)
         const newDeck = shuffleArray([...Array(33).keys()])
         setHandPlayerA(newDeck.slice(-5))
         setHandPlayerB(newDeck.slice(-10, -5))
@@ -54,7 +64,6 @@ export default function SubGame({initGamePrize, gameNumber, onSubGameEnd}) {
         setRank(null)
         setSuit(null)
         setGamePrize(initGamePrize)
-        return hStarts
     }
 
     const prepareTurn = (aiTurn) => {
@@ -66,8 +75,11 @@ export default function SubGame({initGamePrize, gameNumber, onSubGameEnd}) {
         }
     }
 
-    const getValidMoves = () => {
-        const valid = [...Array(38).fill(0)]
+    const getValidMoves = (human = true) => {
+
+        const hand = human ? handPlayerA : handPlayerB
+
+        const valid = [...Array(39).fill(0)]
 
         if (isLastMoveRaise && (!isLastMoveAcceptedRaise)){
             valid[36] = true
@@ -82,19 +94,19 @@ export default function SubGame({initGamePrize, gameNumber, onSubGameEnd}) {
             valid[34] = true
             valid[35] = true
         } else if (playedCards.length % 2 === 0) {
-            handPlayerA.forEach((val) => valid[val] = true)
+            hand.forEach((val) => valid[val] = true)
             valid[35] = true
         } else {
             const playedRS = getRankAndSuit(playedCards.slice(-1)[0])
-            handPlayerA.forEach((id) => canPlayCard(id, playedRS) ? valid[id] = true : valid[id] = false)
+            hand.forEach((id) => canPlayCard(id, playedRS) ? valid[id] = true : valid[id] = false)
             if (valid.reduce((acc, val) => val ? acc + 1 : acc) === 1) {
                 const id = valid.indexOf(true)
                 const rs = getRankAndSuit(id)
                 if (rs[0] === rank && rs[1] === suit) {
-                    handPlayerA.forEach((val) => valid[val] = true)
+                    hand.forEach((val) => valid[val] = true)
                 }
             } else if (valid.reduce((acc, val) => val ? acc + 1 : acc) === 0){
-                handPlayerA.forEach((val) => valid[val] = true)
+                hand.forEach((val) => valid[val] = true)
             }
             valid[35] = true
         }
@@ -113,6 +125,7 @@ export default function SubGame({initGamePrize, gameNumber, onSubGameEnd}) {
 
     const doAITurn = () => {
         console.log('doing AI turn')
+        console.log(getValidMoves(false))
     }
 
     const printDebug = () =>{
@@ -135,38 +148,42 @@ export default function SubGame({initGamePrize, gameNumber, onSubGameEnd}) {
         <WattenCard key={item} actionName={getCardName(getRankAndSuit(item))} actionId={item} isValid={validMoves[item]}/>
     )
 
-    const onRankChosen = (rank, nextTurnAi=true) => {
+    const onRankChosen = (rank, nextAI=true) => {
         setRank(rank)
         setChooseRank(false)
-        prepareTurn(nextTurnAi)
+        setNextTurnAI(nextAI)
+        setTurn(turn+1)
     }
 
-    const onSuitChosen = (suit, nextTurnAi=true) => {
+    const onSuitChosen = (suit, nextAI=true) => {
         setSuit(suit)
         setChooseSuit(false)
-        prepareTurn(nextTurnAi)
+        setNextTurnAI(nextAI)
+        setTurn(turn+1)
     }
 
-    const onRaise = (nextTurnAi=true) => {
+    const onRaise = (nextAI=true) => {
         setIsLastMoveRaise(true)
         if (playedCards.length >= 8) {
             setIsLastHandRaiseValid(checkLastHandRaiseValid(nextTurnAi))
         }
         setGamePrize(gamePrize+1)
-        prepareTurn(nextTurnAi)
+        setNextTurnAI(nextAI)
+        setTurn(turn +1 )
     }
 
-    const onAcceptRaise = (nextTurnAI=true) => {
+    const onAcceptRaise = (nextAI=true) => {
         setIsLastMoveAcceptedRaise(true)
         setIsLastMoveRaise(false)
-        prepareTurn(nextTurnAI)
+        setNextTurnAI(nextAI)
+        setTurn(turn+1)
     }
 
-    const onFold = (nextTurnAi=true) => {
+    const onFold = (nextAI=true) => {
         const score = gamePrize - 1
         isLastHandRaiseValid === null || isLastHandRaiseValid ?
-            onSubGameEnd(!nextTurnAi, score) :
-            onSubGameEnd(nextTurnAi, score)
+            onSubGameEnd(!nextAI, score) :
+            onSubGameEnd(nextAI, score)
     }
 
     const checkLastHandRaiseValid = (isPlayerA) => {
