@@ -12,7 +12,7 @@ export default function RankSuitChoice ({visible, setVisible, title, list, actio
         <Overlay overlayStyle={styles.overlay} isVisible={visible} onBackdropPress={() => setVisible(false)}>
             <View style={styles.choice}>
                 <Text style={{alignSelf: 'center'}}>{title}</Text>
-                {list.slice(0,-1).map(mapList)}
+                {list.map(mapList)}
             </View>
         </Overlay>
     )

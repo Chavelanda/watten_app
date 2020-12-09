@@ -7,7 +7,7 @@ export default function Game({gen}) {
     const [scorePlayerA, setScorePlayerA] = useState(0)
     const [scorePlayerB, setScorePlayerB] = useState(0)
     const [winningPlayer, setWinningPlayer] = useState(null)
-    const [gameNumber, setGameNumber] = useState(0)
+    const [gameNumber, setGameNumber] = useState(1)
     const winThreshold = 15
 
     const initGamePrize = () => {
@@ -28,6 +28,10 @@ export default function Game({gen}) {
         }
     }
 
+    const checkRaiseMakesSense = (human, prize) => {
+        return human ? scorePlayerA + prize < winThreshold : scorePlayerB + prize < winThreshold
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.gameContainer}>
@@ -40,7 +44,7 @@ export default function Game({gen}) {
                 </View>
             </View>
             <View style={styles.subGameContainer}>
-                <SubGame initGamePrize={initGamePrize} gameNumber={gameNumber} onSubGameEnd={onSubGameEnd}/>
+                <SubGame initGamePrize={initGamePrize} gameNumber={gameNumber} onSubGameEnd={onSubGameEnd} checkRaiseMakesSense={checkRaiseMakesSense}/>
             </View>
         </View>
     )

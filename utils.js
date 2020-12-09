@@ -25,7 +25,7 @@ export function getCardName (rs) {
 
 export const moves = {
     playCard: [...Array(33).keys()],
-    pickRank: [...Array(9).keys()].map(i => i + 33),
+    pickRank: [...Array(8).keys()].map(i => i + 33),
     pickSuit: [...Array(4).keys()].map(i => i + 42),
     raisePoints: 46,
     foldHand: 47,

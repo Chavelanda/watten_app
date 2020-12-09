@@ -11,8 +11,8 @@ export default function SubGameInfo (props) {
             <Text>Prize {props.gamePrize}</Text>
             <Text>First Card {getCardName(getRankAndSuit(props.firstCardDeck))}</Text>
             {!props.humanStarting  ? <Text>Last Card {getCardName(getRankAndSuit(props.lastCardDeck))}</Text> : null}
-            {props.rank ? <Text>Rank {rankNames[props.rank]}</Text> : null}
-            {props.suit ? <Text>Suit {suitNames[props.suit]}</Text>: null}
+            {props.rank !== null ? <Text>Rank {rankNames[props.rank]}</Text> : null}
+            {props.suit !== null ? <Text>Suit {suitNames[props.suit]}</Text>: null}
         </View>
     )
 }
