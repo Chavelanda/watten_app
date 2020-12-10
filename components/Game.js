@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Text, StatusBar} from 'react-native';
 import SubGame from "./SubGame";
+import {Button, Overlay} from "react-native-elements";
 
-export default function Game({gen}) {
+export default function Game({gen, goBack}) {
 
     const [scorePlayerA, setScorePlayerA] = useState(0)
     const [scorePlayerB, setScorePlayerB] = useState(0)
     const [winningPlayer, setWinningPlayer] = useState(null)
+    const [wonSubGame, setWonSubGame] = useState(null)
     const [gameNumber, setGameNumber] = useState(1)
     const winThreshold = 15
 
@@ -17,12 +19,14 @@ export default function Game({gen}) {
     const onSubGameEnd = (winsPlayerA, score) => {
         const points = winsPlayerA ? scorePlayerA+score : scorePlayerB+score
         winsPlayerA ? setScorePlayerA(scorePlayerA+score) : setScorePlayerB(scorePlayerB+score)
+        winsPlayerA ? setWonSubGame(1) : setWonSubGame(-1)
         checkWin(winsPlayerA, points)
     }
 
     const checkWin = (winsPlayerA, score) => {
         if (score > 14) {
             winsPlayerA ? setWinningPlayer(1) : setWinningPlayer(-1)
+            // send stats to server
         } else {
             setGameNumber(gameNumber+1)
         }
@@ -46,6 +50,23 @@ export default function Game({gen}) {
             <View style={styles.subGameContainer}>
                 <SubGame initGamePrize={initGamePrize} gameNumber={gameNumber} onSubGameEnd={onSubGameEnd} checkRaiseMakesSense={checkRaiseMakesSense}/>
             </View>
+
+            <Overlay overlayStyle={styles.overlay} isVisible={winningPlayer === null && wonSubGame !== null} onBackdropPress={() => setWonSubGame(null)}>
+                <Button
+                    title={wonSubGame===1 ? 'You won this hand!\nGo on and beat him!\n\nStart next hand' :
+                        'Ahiahiahi!\nThis time he got you...\n\nStart next hand'}
+                    onPress={() => setWonSubGame(null)}
+                    type='clear'
+                />
+            </Overlay>
+            <Overlay isVisible={winningPlayer !== null} overlayStyle={styles.overlay} onBackdropPress={() => goBack()}>
+                <Button
+                    title={winningPlayer===1 ? 'Congratulations, you won!\n\nGo back to Menu' : 'Unfortunately you lost my dear\n\nGo back to menu'}
+                    onPress={() => goBack()}
+                    type='clear'
+                />
+            </Overlay>
+
         </View>
     )
 }
@@ -74,5 +95,12 @@ const styles = StyleSheet.create({
     },
     subGameContainer: {
         flex: 6,
+    },
+    overlay: {
+        margin: 10,
+        width: '70%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 'auto'
     }
 })
