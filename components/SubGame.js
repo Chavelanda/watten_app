@@ -14,6 +14,7 @@ import WattenCard from "./WattenCard";
 import SubGameInfo from "./SubGameInfo";
 import RankSuitChoice from "./RankSuitChoice";
 import {getMove} from "../api/api";
+import Hand from "./Hand";
 
 const debug=false
 
@@ -336,12 +337,8 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
                 </View>
             </View>
             <View style={styles.cardsContainer}>
-                <FlatList
-                    data={handPlayerA}
-                    renderItem={mapCards}
-                    keyExtractor={card => card.toString()}
-                    horizontal={true}
-                />
+
+                <Hand hand={handPlayerA} validMoves={validMoves} onPlay={playCard} />
             </View>
 
             <RankSuitChoice visible={chooseRank} setVisible={setChooseRank} title='Choose Rank' list={rankNames.slice(0,-1)} action={onRankChosen}/>

@@ -2,10 +2,10 @@ import React from "react";
 import {Card} from "react-native-elements";
 import {TouchableHighlight, View, StyleSheet} from "react-native";
 
-export default function WattenCard({actionName, actionId, isValid, onCardPressed}) {
+export default function WattenCard({actionName, actionId, isValid, onCardPressed, style}) {
 
     return (
-        <View style={styles.container}>
+        <View style={style}>
             <Card containerStyle={styles.cardContainer} wrapperStyle={styles.cardWrapper}>
                 <TouchableHighlight disabled={!isValid} style={styles.cardWrapper} onPress={() => onCardPressed(actionId)} activeOpacity={0.3} underlayColor='white'>
                     <Card.Title>{actionName}</Card.Title>
@@ -16,9 +16,6 @@ export default function WattenCard({actionName, actionId, isValid, onCardPressed
 }
 
 const styles=StyleSheet.create({
-    container: {
-        flex: 1,
-    },
     cardContainer: {
         borderRadius: 20,
         borderColor: 'black',
