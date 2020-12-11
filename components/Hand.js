@@ -10,11 +10,12 @@ export default function Hand({hand, validMoves, onPlay}){
         const rotAngle = index*30 - spread
         const radAngle = rotAngle*180/Math.PI
         const transform = rotAngle >= 0 ?
-            [{translateX: -75}, {translateY: 100}, {rotateZ: rotAngle + 'deg'}, {translateY: -(100+Math.abs(75*Math.sin(radAngle)))}, {translateX: 75*Math.abs(Math.cos(radAngle))}] :
-            [{translateX: 75}, {translateY: 100}, {rotateZ: rotAngle + 'deg'}, {translateY: -(100+Math.abs(75*Math.sin(radAngle)))}, {translateX: -75*Math.abs(Math.cos(radAngle))}]
+            [{translateX: -60}, {translateY: 100}, {rotateZ: rotAngle + 'deg'}, {translateY: -(100+Math.abs(60*Math.sin(radAngle)))}, {translateX: 60*Math.abs(Math.cos(radAngle))}] :
+            [{translateX: 60}, {translateY: 100}, {rotateZ: rotAngle + 'deg'}, {translateY: -(100+Math.abs(60*Math.sin(radAngle)))}, {translateX: -60*Math.abs(Math.cos(radAngle))}]
 
         return(
             <WattenCard
+                key={card}
                 style={[styles.card, {transform: transform}]}
                 isValid={validMoves[card]}
                 actionId={card}
@@ -37,6 +38,6 @@ const styles=StyleSheet.create({
         alignItems: 'center'
     },
     card: {
-        position: 'absolute'
+        position: 'absolute',
     }
 })
