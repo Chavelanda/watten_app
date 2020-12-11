@@ -18,6 +18,7 @@ export default function Home({navigation}) {
                         selectedValue={gen}
                         onValueChange={itemValue => setGen(itemValue)}
                         style={styles.picker}>
+                        <Picker.Item label="Random" value={-1}/>
                         <Picker.Item label="GEN 0" value={0}/>
                         <Picker.Item label="GEN 1" value={1}/>
                         <Picker.Item label="GEN 2" value={2}/>

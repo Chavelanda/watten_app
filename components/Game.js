@@ -40,15 +40,15 @@ export default function Game({gen, goBack}) {
         <View style={styles.container}>
             <View style={styles.gameContainer}>
                 <View style={styles.genContainer}>
-                    <Text>Human vs GEN {gen}</Text>
+                    <Text>{gen !== -1 ? 'You vs GEN ' + gen : 'You vs Random'}</Text>
                 </View>
                 <View style={styles.scoreContainer}>
                     <Text>Human {scorePlayerA}</Text>
-                    <Text>GEN {gen} {scorePlayerB}</Text>
+                    <Text>{gen !== -1 ? 'GEN ' + gen : 'Random'} {scorePlayerB}</Text>
                 </View>
             </View>
             <View style={styles.subGameContainer}>
-                <SubGame initGamePrize={initGamePrize} gameNumber={gameNumber} onSubGameEnd={onSubGameEnd} checkRaiseMakesSense={checkRaiseMakesSense}/>
+                <SubGame gen={gen} initGamePrize={initGamePrize} gameNumber={gameNumber} onSubGameEnd={onSubGameEnd} checkRaiseMakesSense={checkRaiseMakesSense}/>
             </View>
 
             <Overlay overlayStyle={styles.overlay} isVisible={winningPlayer === null && wonSubGame !== null} onBackdropPress={() => setWonSubGame(null)}>

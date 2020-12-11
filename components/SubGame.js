@@ -17,7 +17,7 @@ import {getMove} from "../api/api";
 
 const debug=false
 
-export default function SubGame({initGamePrize, gameNumber, onSubGameEnd, checkRaiseMakesSense}) {
+export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, checkRaiseMakesSense}) {
 
     //like distributing card player
     const [humanStarting, setHumanStarting] = useState(false)
@@ -50,8 +50,11 @@ export default function SubGame({initGamePrize, gameNumber, onSubGameEnd, checkR
     }, [gameNumber])
 
     // At each new turn
-    useEffect(() => {
-        prepareTurn()
+    useEffect( () => {
+        async function atNewTurn() {
+            await prepareTurn()
+        }
+        atNewTurn()
     }, [turn])
 
     const initSubGame = () => {
@@ -75,10 +78,10 @@ export default function SubGame({initGamePrize, gameNumber, onSubGameEnd, checkR
         return hStarts
     }
 
-    const prepareTurn = () => {
+    const prepareTurn = async () => {
         if (turn.nextTurnAI) {
             setValidMoves([...Array(38).fill(false)])
-            doAITurn()
+            await doAITurn()
         } else {
             setValidMoves(getValidMoves())
         }
@@ -130,10 +133,10 @@ export default function SubGame({initGamePrize, gameNumber, onSubGameEnd, checkR
         return (!isLastMoveRaise && !isLastMoveAcceptedRaise && isLastHandRaiseValid === null && checkRaiseMakesSense(human, gamePrize))
     }
 
-    const doAITurn = () => {
+    const doAITurn = async () => {
         !turn.nextTurnAI ? console.warn("It is impossible to have AI playing" +
             "the turn with nextTurnAI = false") : null
-        const move = getMove(0, [], getValidMoves(false))
+        const move = await getMove(gen, [], getValidMoves(false))
         if (move < 33) {
             playCard(move, false)
         } else if (move < 42) {
