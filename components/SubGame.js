@@ -17,7 +17,7 @@ import {getMove} from "../api/api";
 
 const debug=false
 
-export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, checkRaiseMakesSense}) {
+export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, checkRaiseMakesSense, scoreA, scoreB}) {
 
     //like distributing card player
     const [humanStarting, setHumanStarting] = useState(false)
@@ -136,7 +136,25 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
     const doAITurn = async () => {
         !turn.nextTurnAI ? console.warn("It is impossible to have AI playing" +
             "the turn with nextTurnAI = false") : null
-        const move = await getMove(gen, [], getValidMoves(false))
+        const state = {
+            humanStarting: humanStarting,
+            scoreA: scoreA,
+            scoreB: scoreB,
+            handA: handPlayerA,
+            handB: handPlayerB,
+            playedCards: playedCards,
+            currentScoreA: scorePlayerA,
+            currentScoreB: scorePlayerB,
+            prize: gamePrize,
+            isLastMoveRaise: isLastMoveRaise,
+            isLastMoveAcceptedRaise: isLastMoveAcceptedRaise,
+            isLastHandRaiseValid: isLastHandRaiseValid,
+            firstCard: firstCardDeck,
+            lastCard: lastCardDeck,
+            rank: rank,
+            suit: suit
+        }
+        const move = await getMove(gen, state, getValidMoves(false))
         if (move < 33) {
             playCard(move, false)
         } else if (move < 42) {
