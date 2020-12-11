@@ -15,6 +15,7 @@ import SubGameInfo from "./SubGameInfo";
 import RankSuitChoice from "./RankSuitChoice";
 import {getMove} from "../api/api";
 import Hand from "./Hand";
+import Table from "./Table";
 
 const debug=false
 
@@ -55,7 +56,17 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
         async function atNewTurn() {
             await prepareTurn()
         }
-        atNewTurn()
+        let timer = null
+        // timer to leave time for game animation
+        if (turn.nextTurnAI && playedCards.length > 1 && playedCards.length % 2 === 0) {
+            timer = setTimeout(() => atNewTurn(), 1500)
+        } else {
+            timer = setTimeout(() => atNewTurn(), 0)
+        }
+
+        return () => {
+            clearTimeout(timer)
+        }
     }, [turn])
 
     const initSubGame = () => {
@@ -317,14 +328,7 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
                         humanStarting={humanStarting} lastCardDeck={lastCardDeck} rank={rank} suit={suit}/>
                 </View>
                 <View style={styles.playedCardContainer}>
-                    {playedCards.length % 2 === 1 ? (
-                        <View style={styles.playedCardContainer}>
-                            <Text>Card on the table</Text>
-                            <WattenCard actionId={playedCards.slice(-1)[0]} actionName={getCardName(getRankAndSuit(playedCards.slice(-1)[0]))} valid={false} onCardPressed={null}/>
-                        </View>
-                        ) : null
-                    }
-                    {isLastMoveRaise && turn.nextTurnAI === false ? <Text>AI raised!</Text> : null}
+                    <Table isLastMoveRaise={isLastMoveRaise} playedCards={playedCards} turn={turn}/>
                 </View>
                 <View style={styles.buttonsContainer}>
                     {validMoves[35] ? <Button title='Raise Prize' onPress={() => onRaise()} type='outline' raised/> : null}
@@ -337,7 +341,6 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
                 </View>
             </View>
             <View style={styles.cardsContainer}>
-
                 <Hand hand={handPlayerA} validMoves={validMoves} onPlay={playCard} />
             </View>
 
@@ -365,7 +368,7 @@ const styles = StyleSheet.create({
     playedCardContainer: {
         flex: 2,
         alignItems: 'center',
-        justifyContent: 'space-around'
+        justifyContent: 'center'
     },
     buttonsContainer: {
         flex: 1,

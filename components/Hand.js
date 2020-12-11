@@ -19,7 +19,6 @@ export default function Hand({hand, validMoves, onPlay}){
                 style={[styles.card, {transform: transform}]}
                 isValid={validMoves[card]}
                 actionId={card}
-                actionName={getCardName(getRankAndSuit(card))}
                 onCardPressed={onPlay}
             />
         )

@@ -1,10 +1,10 @@
 import React, {useState} from "react";
 import {Card, Overlay} from "react-native-elements";
 import {View, StyleSheet, Image, Pressable} from "react-native";
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import GestureRecognizer from 'react-native-swipe-gestures';
 import {getRankAndSuit, images} from "../utils";
 
-export default function WattenCard({actionName, actionId, isValid, onCardPressed, style}) {
+export default function WattenCard({actionId, isValid, onCardPressed, style}) {
 
     const [pressing, setPressing] = useState(false)
 
