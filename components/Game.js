@@ -39,16 +39,17 @@ export default function Game({gen, goBack}) {
     return (
         <View style={styles.container}>
             <View style={styles.gameContainer}>
-                <View style={styles.genContainer}>
-                    <Text>{gen !== -1 ? 'You vs GEN ' + gen : 'You vs Random'}</Text>
+                <View style={styles.youContainer}>
+                    <Text style={styles.nameText}>YOU</Text>
+                    <Text style={styles.gameText}>GAME {scorePlayerA}</Text>
                 </View>
-                <View style={styles.scoreContainer}>
-                    <Text>Human {scorePlayerA}</Text>
-                    <Text>{gen !== -1 ? 'GEN ' + gen : 'Random'} {scorePlayerB}</Text>
+                <View style={styles.karlContainer}>
+                    <Text style={styles.nameText}>KARL{gen}</Text>
+                    <Text style={styles.gameText}>GAME {scorePlayerB}</Text>
                 </View>
             </View>
             <View style={styles.subGameContainer}>
-                <SubGame gen={gen} initGamePrize={initGamePrize} gameNumber={gameNumber} onSubGameEnd={onSubGameEnd} checkRaiseMakesSense={checkRaiseMakesSense}/>
+                <SubGame scoreA={scorePlayerA} scoreB={scorePlayerB} gen={gen} initGamePrize={initGamePrize} gameNumber={gameNumber} onSubGameEnd={onSubGameEnd} checkRaiseMakesSense={checkRaiseMakesSense}/>
             </View>
 
             <Overlay overlayStyle={styles.overlay} isVisible={winningPlayer === null && wonSubGame !== null} onBackdropPress={() => setWonSubGame(null)}>
@@ -74,27 +75,44 @@ export default function Game({gen, goBack}) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'grey'
+        backgroundColor: 'transparent'
     },
     gameContainer: {
         flex: 1,
         flexDirection: 'row',
         marginTop: StatusBar.currentHeight
     },
-    genContainer: {
+    youContainer: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         alignItems: 'flex-start',
-        marginLeft: 30,
+        marginLeft: 20,
     },
-    scoreContainer: {
+    karlContainer: {
         flex: 1,
         justifyContent: 'space-around',
         alignItems: 'flex-end',
-        marginRight: 30,
+        marginRight: 20,
+    },
+    nameContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    pointsContainer: {
+        flex: 3,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    nameText:{
+        fontWeight: 'bold',
+        fontSize: 20,
+    },
+    gameText: {
+        fontWeight: 'bold'
     },
     subGameContainer: {
-        flex: 6,
+        flex: 10,
     },
     overlay: {
         margin: 10,

@@ -39,7 +39,7 @@ const getMoveFromServer = async (generation, state, validMovesZeros) => {
         });
         let json = await response.json()
 
-        console.log(json)
+        return json.move
     } catch (e) {
         console.log(e)
     }

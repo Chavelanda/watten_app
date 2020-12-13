@@ -322,6 +322,11 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
     return (
         <View style={styles.container}>
             {debug ? printDebug() : null}
+            <View style={styles.scoreContainer}>
+                <Text style={styles.handText}>HAND {scorePlayerA}</Text>
+                <Text style={styles.handText}>PRIZE {gamePrize}</Text>
+                <Text style={styles.handText}>HAND {scorePlayerB}</Text>
+            </View>
             <View style={styles.upperContainer}>
                 <View style={styles.infoContainer}>
                     <SubGameInfo scorePlayerA={scorePlayerA} scorePlayerB={scorePlayerB} gamePrize={gamePrize} firstCardDeck={firstCardDeck}
@@ -331,7 +336,7 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
                     <Table isLastMoveRaise={isLastMoveRaise} playedCards={playedCards} turn={turn}/>
                 </View>
                 <View style={styles.buttonsContainer}>
-                    {validMoves[35] ? <Button title='Raise Prize' onPress={() => onRaise()} type='outline' raised/> : null}
+                    {validMoves[35] ? <Button title='Raise Prize' onPress={() => onRaise()} type='outline' raised titleStyle={{color: 'black'}}/> : null}
                     {validMoves[37] ? <Button title='Accept Raise' onPress={() => onAcceptRaise()} type='outline' raised/> : null}
                     {validMoves[36] ? <Button title='Fold Hand' onPress={() => onFold()} type='outline' raised/> : null}
                     {validMoves[38] ? <Button title='Show valid raise' onPress={() => onFold()}
@@ -353,13 +358,24 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'transparent'
     },
     debug: {
         flex: 1,
     },
-    upperContainer: {
+    scoreContainer: {
         flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+    },
+    handText: {
+        fontWeight: 'bold'
+    },
+    upperContainer: {
+        flex: 8,
         flexDirection: 'row'
     },
     infoContainer: {
@@ -377,9 +393,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around'
     },
     cardsContainer: {
-        flex: 1,
+        flex: 8,
         flexDirection: 'row',
-        backgroundColor: 'white'
     }
 })
 

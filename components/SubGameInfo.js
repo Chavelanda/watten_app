@@ -1,19 +1,19 @@
 import React from "react";
 import {Text, View, StyleSheet} from "react-native";
 import {getCardName, getRankAndSuit, rankNames, suitNames} from "../utils";
+import {Button} from "react-native-elements";
 
 export default function SubGameInfo (props) {
 
     return (
         <View style={styles.container}>
-            <Text>You {props.scorePlayerA}</Text>
-            <Text>AI {props.scorePlayerB}</Text>
-            <Text>Prize {props.gamePrize}</Text>
-            <Text>First Card {getCardName(getRankAndSuit(props.firstCardDeck))}</Text>
-            {!props.humanStarting  ? <Text>Last Card {getCardName(getRankAndSuit(props.lastCardDeck))}</Text> : null}
-            {props.rank !== null ? <Text>Rank {rankNames[props.rank]}</Text> : null}
-            {props.suit !== null ? <Text>Suit {suitNames[props.suit]}</Text>: null}
+            <Button disabledStyle={styles.button} disabledTitleStyle={styles.text} disabled={true} title={'First Card\n' + getCardName(getRankAndSuit(props.firstCardDeck))}/>
+            {!props.humanStarting  ? <Button disabledStyle={styles.button} disabledTitleStyle={styles.text} disabled={true} title={'Last Card\n' + getCardName(getRankAndSuit(props.lastCardDeck))}/> : null}
+            {props.rank !== null ? <Button disabledStyle={styles.button} disabledTitleStyle={styles.text} disabled={true} title={'Rank ' + rankNames[props.rank]}/> : null}
+            {props.suit !== null ? <Button disabledStyle={styles.button} disabledTitleStyle={styles.text} disabled={true} title={'Suit ' + suitNames[props.suit]}/>: null}
         </View>
+
+
     )
 }
 
@@ -22,5 +22,13 @@ const styles=StyleSheet.create({
         flex: 1,
         justifyContent: 'space-around',
         marginLeft: 10,
+    },
+    text: {
+        color: 'black',
+        fontWeight: 'bold',
+        fontSize: 11
+    },
+    button: {
+        backgroundColor: 'white',
     }
 })
