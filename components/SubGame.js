@@ -333,7 +333,7 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
                         humanStarting={humanStarting} lastCardDeck={lastCardDeck} rank={rank} suit={suit}/>
                 </View>
                 <View style={styles.playedCardContainer}>
-                    <Table isLastMoveRaise={isLastMoveRaise} playedCards={playedCards} turn={turn}/>
+                    <Table isLastMoveRaise={isLastMoveRaise} isLastMoveAcceptedRaise={isLastMoveAcceptedRaise} playedCards={playedCards} turn={turn}/>
                 </View>
                 <View style={styles.buttonsContainer}>
                     {validMoves[35] ? <Button title='Raise Prize' onPress={() => onRaise()} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}

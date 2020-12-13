@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {Text, View, StyleSheet, Animated} from "react-native";
 import WattenCard from "./WattenCard";
 
-export default function Table ({playedCards, isLastMoveRaise, turn}) {
+export default function Table ({playedCards, isLastMoveRaise, isLastMoveAcceptedRaise, turn}) {
 
     const translateValue = useRef(new Animated.Value(0)).current
     const [cardChanged, setCardChanged] = useState(false)
@@ -50,6 +50,11 @@ export default function Table ({playedCards, isLastMoveRaise, turn}) {
             {isLastMoveRaise && turn.nextTurnAI === false ?
                 <View style={styles.textContainer}>
                     <Text style={styles.text}>KARL RAISED!</Text>
+                </View>: null
+            }
+            {isLastMoveAcceptedRaise && turn.nextTurnAI === false ?
+                <View style={styles.textContainer}>
+                    <Text style={styles.text}>KARL ACCEPTED</Text>
                 </View>: null
             }
         </View>

@@ -8,11 +8,13 @@ export default function SubGameInfo (props) {
     return (
         <View style={styles.container}>
             <View style={styles.box}>
-                <Text style={styles.text}>First Card {'\n' + getCardName(getRankAndSuit(props.firstCardDeck))}</Text>
+                <Text style={styles.text}>First Card</Text>
+                <Text style={styles.text}>{getCardName(getRankAndSuit(props.firstCardDeck))}</Text>
             </View>
             {!props.humanStarting  ?
                 <View style={styles.box}>
-                    <Text style={styles.text}>Last Card {'\n' + getCardName(getRankAndSuit(props.lastCardDeck))}</Text>
+                    <Text style={styles.text}>Last Card</Text>
+                    <Text style={styles.text}>{getCardName(getRankAndSuit(props.lastCardDeck))}</Text>
                 </View> : null}
             {props.rank !== null ?
                 <View style={styles.box}>
