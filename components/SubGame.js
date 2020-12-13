@@ -336,13 +336,13 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
                     <Table isLastMoveRaise={isLastMoveRaise} playedCards={playedCards} turn={turn}/>
                 </View>
                 <View style={styles.buttonsContainer}>
-                    {validMoves[35] ? <Button title='Raise Prize' onPress={() => onRaise()} type='outline' raised titleStyle={{color: 'black'}}/> : null}
-                    {validMoves[37] ? <Button title='Accept Raise' onPress={() => onAcceptRaise()} type='outline' raised/> : null}
-                    {validMoves[36] ? <Button title='Fold Hand' onPress={() => onFold()} type='outline' raised/> : null}
+                    {validMoves[35] ? <Button title='Raise Prize' onPress={() => onRaise()} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
+                    {validMoves[37] ? <Button title='Accept Raise' onPress={() => onAcceptRaise()} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
+                    {validMoves[36] ? <Button title='Fold Hand' onPress={() => onFold()} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
                     {validMoves[38] ? <Button title='Show valid raise' onPress={() => onFold()}
                              type='outline' raised/> : null}
-                    {validMoves[33] ? <Button title='Select Rank' onPress={() => setChooseRank(true)} type='outline' raised/> : null}
-                    {validMoves[34] ? <Button title='Select Suit' onPress={() => setChooseSuit(true)} type='outline' raised/> : null}
+                    {validMoves[33] ? <Button title='Select Rank' onPress={() => setChooseRank(true)} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
+                    {validMoves[34] ? <Button title='Select Suit' onPress={() => setChooseSuit(true)} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
                 </View>
             </View>
             <View style={styles.cardsContainer}>
@@ -368,11 +368,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginLeft: 20,
-        marginRight: 20,
+        marginLeft: 10,
+        marginRight: 10,
+        paddingHorizontal: 10,
+        backgroundColor: 'white',
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
     },
     handText: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: 'black',
+        fontSize: 12,
     },
     upperContainer: {
         flex: 8,
@@ -391,6 +397,9 @@ const styles = StyleSheet.create({
         marginRight: 10,
         alignItems: 'flex-end',
         justifyContent: 'space-around'
+    },
+    buttonTitleStyle: {
+        color: 'black',
     },
     cardsContainer: {
         flex: 8,

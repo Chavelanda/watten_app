@@ -7,13 +7,22 @@ export default function SubGameInfo (props) {
 
     return (
         <View style={styles.container}>
-            <Button disabledStyle={styles.button} disabledTitleStyle={styles.text} disabled={true} title={'First Card\n' + getCardName(getRankAndSuit(props.firstCardDeck))}/>
-            {!props.humanStarting  ? <Button disabledStyle={styles.button} disabledTitleStyle={styles.text} disabled={true} title={'Last Card\n' + getCardName(getRankAndSuit(props.lastCardDeck))}/> : null}
-            {props.rank !== null ? <Button disabledStyle={styles.button} disabledTitleStyle={styles.text} disabled={true} title={'Rank ' + rankNames[props.rank]}/> : null}
-            {props.suit !== null ? <Button disabledStyle={styles.button} disabledTitleStyle={styles.text} disabled={true} title={'Suit ' + suitNames[props.suit]}/>: null}
+            <View style={styles.box}>
+                <Text style={styles.text}>First Card {'\n' + getCardName(getRankAndSuit(props.firstCardDeck))}</Text>
+            </View>
+            {!props.humanStarting  ?
+                <View style={styles.box}>
+                    <Text style={styles.text}>Last Card {'\n' + getCardName(getRankAndSuit(props.lastCardDeck))}</Text>
+                </View> : null}
+            {props.rank !== null ?
+                <View style={styles.box}>
+                    <Text style={styles.text}>Rank {rankNames[props.rank]}</Text>
+                </View> : null}
+            {props.suit !== null ?
+                <View style={styles.box}>
+                    <Text style={styles.text}>Suit {suitNames[props.suit]}</Text>
+                </View> : null}
         </View>
-
-
     )
 }
 
@@ -23,12 +32,15 @@ const styles=StyleSheet.create({
         justifyContent: 'space-around',
         marginLeft: 10,
     },
-    text: {
-        color: 'black',
-        fontWeight: 'bold',
-        fontSize: 11
-    },
-    button: {
+    box: {
         backgroundColor: 'white',
+        alignItems: 'center',
+        borderRadius: 5,
+        paddingVertical: 5,
+    },
+    text: {
+        fontWeight: 'bold',
+        color: 'black',
+        fontSize: 11,
     }
 })

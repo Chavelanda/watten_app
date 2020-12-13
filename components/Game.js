@@ -80,36 +80,33 @@ const styles = StyleSheet.create({
     gameContainer: {
         flex: 1,
         flexDirection: 'row',
-        marginTop: StatusBar.currentHeight
+        marginTop: StatusBar.currentHeight,
+        backgroundColor: 'white',
+        marginLeft: 10,
+        marginRight: 10,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
     },
     youContainer: {
         flex: 1,
         justifyContent: 'space-around',
         alignItems: 'flex-start',
-        marginLeft: 20,
+        marginLeft: 10,
     },
     karlContainer: {
         flex: 1,
         justifyContent: 'space-around',
         alignItems: 'flex-end',
-        marginRight: 20,
-    },
-    nameContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    pointsContainer: {
-        flex: 3,
-        alignItems: 'center',
-        justifyContent: 'center'
+        marginRight: 10,
     },
     nameText:{
         fontWeight: 'bold',
         fontSize: 20,
     },
     gameText: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: 'black',
+        fontSize: 12,
     },
     subGameContainer: {
         flex: 10,
