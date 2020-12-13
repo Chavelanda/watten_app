@@ -256,9 +256,13 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
 
     const onFold = (nextAI=true) => {
         const score = gamePrize - 1
-        isLastHandRaiseValid === null || isLastHandRaiseValid ?
-            onSubGameEnd(!nextAI, score) :
+        if (isLastHandRaiseValid === null || isLastHandRaiseValid) {
+            const message = nextAI ? '' : 'Karl folded!'
+            onSubGameEnd(!nextAI, score, message)
+        } else {
+            const message = nextAI ? 'Karl could not raise in last hand' : 'You could not raise in last hand'
             onSubGameEnd(nextAI, score)
+        }
     }
 
     const playCard = (card, nextAI=true) => {
@@ -275,7 +279,8 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
         }
 
         if(isLastHandRaiseValid !== null && !isLastHandRaiseValid) {
-            onSubGameEnd(!nextAI, gamePrize)
+            const message = nextAI ? 'You couldn\'t raise in last turn.' : 'Karl couldn\'t raise in last turn'
+            onSubGameEnd(!nextAI, gamePrize, message)
         } else {
             if (playedCards.length % 2 === 0) {
                 const newPlayedCards = [...playedCards]
@@ -339,8 +344,6 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
                     {validMoves[35] ? <Button title='Raise Prize' onPress={() => onRaise()} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
                     {validMoves[37] ? <Button title='Accept Raise' onPress={() => onAcceptRaise()} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
                     {validMoves[36] ? <Button title='Fold Hand' onPress={() => onFold()} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
-                    {validMoves[38] ? <Button title='Show valid raise' onPress={() => onFold()}
-                             type='outline' raised/> : null}
                     {validMoves[33] ? <Button title='Select Rank' onPress={() => setChooseRank(true)} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
                     {validMoves[34] ? <Button title='Select Suit' onPress={() => setChooseSuit(true)} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
                 </View>

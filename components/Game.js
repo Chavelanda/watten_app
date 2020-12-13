@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text, StatusBar} from 'react-native';
 import SubGame from "./SubGame";
 import {Button, Overlay} from "react-native-elements";
@@ -9,6 +9,7 @@ export default function Game({gen, goBack}) {
     const [scorePlayerB, setScorePlayerB] = useState(0)
     const [winningPlayer, setWinningPlayer] = useState(null)
     const [wonSubGame, setWonSubGame] = useState(null)
+    const [message, setMessage] = useState('')
     const [gameNumber, setGameNumber] = useState(1)
     const winThreshold = 15
 
@@ -16,7 +17,9 @@ export default function Game({gen, goBack}) {
         return (winThreshold - scorePlayerA <= 2 || winThreshold - scorePlayerB <= 2) ? (scorePlayerA < 10 || scorePlayerB < 10) ? 4 : 3 : 2
     }
 
-    const onSubGameEnd = (winsPlayerA, score) => {
+    const onSubGameEnd = (winsPlayerA, score, mess='') => {
+        mess = mess !== '' ? mess + '\n' : mess
+        setMessage(mess)
         const points = winsPlayerA ? scorePlayerA+score : scorePlayerB+score
         winsPlayerA ? setScorePlayerA(scorePlayerA+score) : setScorePlayerB(scorePlayerB+score)
         winsPlayerA ? setWonSubGame(1) : setWonSubGame(-1)
@@ -54,7 +57,7 @@ export default function Game({gen, goBack}) {
 
             <Overlay overlayStyle={styles.overlay} isVisible={winningPlayer === null && wonSubGame !== null} onBackdropPress={() => setWonSubGame(null)}>
                 <Button
-                    title={wonSubGame===1 ? 'You won this hand!\nGo on and beat him!\n\nStart next hand' :
+                    title={wonSubGame===1 ? message + 'You won this hand!\nGo on and beat him!\n\nStart next hand' :
                         'Ahiahiahi!\nThis time he got you...\n\nStart next hand'}
                     onPress={() => setWonSubGame(null)}
                     type='clear'
@@ -62,7 +65,7 @@ export default function Game({gen, goBack}) {
             </Overlay>
             <Overlay isVisible={winningPlayer !== null} overlayStyle={styles.overlay} onBackdropPress={() => goBack()}>
                 <Button
-                    title={winningPlayer===1 ? 'Congratulations, you won!\n\nGo back to Menu' : 'Unfortunately you lost my dear\n\nGo back to menu'}
+                    title={winningPlayer===1 ? message + 'Congratulations, you won!\n\nGo back to Menu' : 'Unfortunately you lost my dear\n\nGo back to menu'}
                     onPress={() => goBack()}
                     type='clear'
                 />
