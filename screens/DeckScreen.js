@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, StyleSheet} from 'react-native';
+import DeckRules from "../components/DeckRules";
 
 export default function DeckScreen() {
 
   return (
     <View style={styles.container}>
+      <DeckRules/>
     </View>
   )
 }
@@ -12,6 +14,6 @@ export default function DeckScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black'
+    backgroundColor: 'white'
   }
 })
