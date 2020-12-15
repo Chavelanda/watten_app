@@ -341,11 +341,11 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
                     <Table isLastMoveRaise={isLastMoveRaise} isLastMoveAcceptedRaise={isLastMoveAcceptedRaise} playedCards={playedCards} turn={turn}/>
                 </View>
                 <View style={styles.buttonsContainer}>
-                    {validMoves[35] ? <Button title='Raise Prize' onPress={() => onRaise()} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
-                    {validMoves[37] ? <Button title='Accept Raise' onPress={() => onAcceptRaise()} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
-                    {validMoves[36] ? <Button title='Fold Hand' onPress={() => onFold()} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
-                    {validMoves[33] ? <Button title='Select Rank' onPress={() => setChooseRank(true)} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
-                    {validMoves[34] ? <Button title='Select Suit' onPress={() => setChooseSuit(true)} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
+                    {validMoves[35] ? <Button buttonStyle={styles.buttonStyle} title='Raise Prize' onPress={() => onRaise()} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
+                    {validMoves[37] ? <Button buttonStyle={styles.buttonStyle} title='Accept Raise' onPress={() => onAcceptRaise()} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
+                    {validMoves[36] ? <Button buttonStyle={styles.buttonStyle} title='Fold Hand' onPress={() => onFold()} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
+                    {validMoves[33] ? <Button buttonStyle={styles.buttonStyle} title='Select Rank' onPress={() => setChooseRank(true)} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
+                    {validMoves[34] ? <Button buttonStyle={styles.buttonStyle} title='Select Suit' onPress={() => setChooseSuit(true)} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
                 </View>
             </View>
             <View style={styles.cardsContainer}>
@@ -400,6 +400,9 @@ const styles = StyleSheet.create({
         marginRight: 10,
         alignItems: 'flex-end',
         justifyContent: 'space-around'
+    },
+    buttonStyle: {
+        borderColor: 'black'
     },
     buttonTitleStyle: {
         color: 'black',

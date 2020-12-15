@@ -5,13 +5,13 @@ import {Button, Overlay} from "react-native-elements";
 export default function RankSuitChoice ({visible, setVisible, title, list, action}) {
 
     const mapList = (str, id) => (
-        <Button key={id} title={str} type='clear' onPress={() => action(id)}/>
+        <Button titleStyle={styles.text} key={id} title={str} type='clear' onPress={() => action(id)}/>
     )
 
     return (
         <Overlay overlayStyle={styles.overlay} isVisible={visible} onBackdropPress={() => setVisible(false)}>
             <View style={styles.choice}>
-                <Text style={{alignSelf: 'center'}}>{title}</Text>
+                <Text style={[{alignSelf: 'center', fontWeight: 'bold'}, styles.text]}>{title}</Text>
                 {list.map(mapList)}
             </View>
         </Overlay>
@@ -27,5 +27,8 @@ const styles=StyleSheet.create({
     choice: {
         flex: 1,
         justifyContent: 'space-around',
+    },
+    text: {
+        color: 'black',
     }
 })
