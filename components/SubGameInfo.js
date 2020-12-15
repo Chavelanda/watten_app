@@ -1,7 +1,6 @@
 import React from "react";
-import {Text, View, StyleSheet} from "react-native";
-import {getCardName, getRankAndSuit, rankNames, suitNames} from "../utils";
-import {Button} from "react-native-elements";
+import {Text, View, StyleSheet, Image} from "react-native";
+import {getCardName, getRankAndSuit, rankNames, suitImages, suitNames} from "../utils";
 
 export default function SubGameInfo (props) {
 
@@ -21,8 +20,9 @@ export default function SubGameInfo (props) {
                     <Text style={styles.text}>Rank {rankNames[props.rank]}</Text>
                 </View> : null}
             {props.suit !== null ?
-                <View style={styles.box}>
-                    <Text style={styles.text}>Suit {suitNames[props.suit]}</Text>
+                <View style={[styles.box, {flexDirection: 'row', justifyContent: 'center'}]}>
+                    <Text style={styles.text}>Suit</Text>
+                    <Image style={styles.suitImage} resizeMode='contain' resizeMethod='scale' source={suitImages[props.suit].uri}/>
                 </View> : null}
         </View>
     )
@@ -44,5 +44,10 @@ const styles=StyleSheet.create({
         fontWeight: 'bold',
         color: 'black',
         fontSize: 11,
-    }
+    },
+    suitImage: {
+        width: 20,
+        height: 20,
+        marginLeft: 5,
+    },
 })

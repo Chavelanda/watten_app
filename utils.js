@@ -37,6 +37,10 @@ export const rankNames = ['7', '8', '9', '10', 'Unter', 'Ober', 'König', 'Ass',
 
 export const suitNames = ['laab', 'herz', 'oachl', 'schell', '-']
 
+export const suitImages = [
+    {uri: require('./assets/semi/laab.png')}, {uri: require('./assets/semi/herz.png')},
+    {uri: require('./assets/semi/oachl.png')}, {uri: require('./assets/semi/schell.png')}]
+
 export const isRechte = (r, s, rank, suit) => {
     return ((r === 8 && rank === 8) || (r === rank && s === suit))
 }
