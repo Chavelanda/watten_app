@@ -102,6 +102,9 @@ export default function GameRules() {
             <Text>
                 To have a look at the standard rules you can look the <Text style={styles.hyperlink}  onPress={() => Linking.openURL('https://en.wikipedia.org/wiki/Watten_(card_game)')}>wikipedia</Text> page.
             </Text>
+            <Text>
+                For a pdf manual (in italian) check <Text style={styles.hyperlink}  onPress={() => Linking.openURL('http://www.fabiovassallo.it/ita/watten.html')}>here</Text>.
+            </Text>
             <Text style={styles.lastElement}>
                 If you want to play Watten with other human players online you should check <Text style={styles.hyperlink}  onPress={() => Linking.openURL('https://www.watten.org/')}>here</Text>.
             </Text>
