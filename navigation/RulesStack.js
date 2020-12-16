@@ -19,7 +19,7 @@ export default function RulesStack() {
     >
       <Stack.Screen name='Rules' component={RulesScreen} />
       <Stack.Screen name='Deck' component={DeckScreen} />
-      <Stack.Screen name='GameDes' component={GameDesScreen} />
+      <Stack.Screen name='GameDes' component={GameDesScreen} options={{title: 'Game'}}/>
       <Stack.Screen name='History' component={HistoryScreen} />
     </Stack.Navigator>
   )

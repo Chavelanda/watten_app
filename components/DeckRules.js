@@ -5,15 +5,15 @@ import {getRankAndSuit, images, rankNames, suitImages, suitNames} from "../utils
 export default function DeckRules() {
 
     const mapSuitToImage = (suit) => (
-        <View style={styles.suitContainer}>
-            <Image key={suit} source={suitImages[suit].uri} style={styles.suitImage} resizeMode='contain' resizeMethod='scale'/>
+        <View key={suit} style={styles.suitContainer}>
+            <Image source={suitImages[suit].uri} style={styles.suitImage} resizeMode='contain' resizeMethod='scale'/>
             <Text style={styles.suitText}>{suitNames[suit]}</Text>
         </View>
     )
 
     const mapRanksToImage = (rank) => (
-        <View style={styles.suitContainer}>
-            <Image key={rank} source={images[rank].uri} style={styles.rankImage} resizeMode='contain' resizeMethod='scale'/>
+        <View key={rank} style={styles.suitContainer}>
+            <Image source={images[rank].uri} style={styles.rankImage} resizeMode='contain' resizeMethod='scale'/>
             <Text style={styles.suitText}>{rankNames[getRankAndSuit(rank)[0]]}</Text>
         </View>
     )
@@ -23,7 +23,7 @@ export default function DeckRules() {
             <Text style={styles.title}>DECK</Text>
             <Text>
                 Watten is a typical game from the tyrolean-bavarian area.
-                The salzburger cards are the one used to play the game.
+                The Salzburger cards are the one used to play the game.
                 The deck is composed of 33 cards: 8 for each suit plus one.
             </Text>
             <Text style={styles.title}>SUITS</Text>
@@ -50,7 +50,7 @@ export default function DeckRules() {
             <View style={styles.rankAndSuits}>
                 {[...Array(4).keys()].map((val) => val+24).map(mapRanksToImage)}
             </View>
-            <View style={styles.rankAndSuits}>
+            <View style={[styles.rankAndSuits, {marginBottom: 20}]}>
                 {[...Array(4).keys()].map((val) => val+28).map(mapRanksToImage)}
             </View>
         </ScrollView>
@@ -61,9 +61,8 @@ export default function DeckRules() {
 const styles=StyleSheet.create({
     container: {
         flex: 1,
-        marginHorizontal: 20,
+        paddingHorizontal: 20,
         backgroundColor: 'white',
-        marginBottom: 20,
     },
     title: {
         fontWeight: 'bold',
