@@ -1,6 +1,6 @@
 import React from "react";
 import {View, StyleSheet, Text, Image, ScrollView} from "react-native";
-import {getRankAndSuit, images, rankNames, suitImages, suitNames} from "../utils";
+import {getRankAndSuit, images, rankNames, suitImages, suitNames} from "../utils/utils";
 
 export default function DeckRules() {
 

@@ -38,8 +38,8 @@ export const rankNames = ['7', '8', '9', '10', 'Unter', 'Ober', 'König', 'Ass',
 export const suitNames = ['laab', 'herz', 'oachl', 'schell', '-']
 
 export const suitImages = [
-    {uri: require('./assets/semi/laab.png')}, {uri: require('./assets/semi/herz.png')},
-    {uri: require('./assets/semi/oachl.png')}, {uri: require('./assets/semi/schell.png')}]
+    {uri: require('../assets/semi/laab.png')}, {uri: require('../assets/semi/herz.png')},
+    {uri: require('../assets/semi/oachl.png')}, {uri: require('../assets/semi/schell.png')}]
 
 export const isRechte = (r, s, rank, suit) => {
     return ((r === 8 && rank === 8) || (r === rank && s === suit))
@@ -97,23 +97,23 @@ export const compareCards = (firstPlayed, secondPlayed, rank, suit) => {
 }
 
 export const images = [
-    {uri: require('./assets/carte/0.png')}, {uri: require('./assets/carte/1.png')},
-    {uri: require('./assets/carte/2.png')}, {uri: require('./assets/carte/3.png')},
-    {uri: require('./assets/carte/4.png')}, {uri: require('./assets/carte/5.png')},
-    {uri: require('./assets/carte/6.png')}, {uri: require('./assets/carte/7.png')},
-    {uri: require('./assets/carte/8.png')}, {uri: require('./assets/carte/9.png')},
-    {uri: require('./assets/carte/10.png')}, {uri: require('./assets/carte/11.png')},
-    {uri: require('./assets/carte/12.png')}, {uri: require('./assets/carte/13.png')},
-    {uri: require('./assets/carte/14.png')}, {uri: require('./assets/carte/15.png')},
-    {uri: require('./assets/carte/16.png')}, {uri: require('./assets/carte/17.png')},
-    {uri: require('./assets/carte/18.png')}, {uri: require('./assets/carte/19.png')},
-    {uri: require('./assets/carte/20.png')}, {uri: require('./assets/carte/21.png')},
-    {uri: require('./assets/carte/22.png')}, {uri: require('./assets/carte/23.png')},
-    {uri: require('./assets/carte/24.png')}, {uri: require('./assets/carte/25.png')},
-    {uri: require('./assets/carte/26.png')}, {uri: require('./assets/carte/27.png')},
-    {uri: require('./assets/carte/28.png')}, {uri: require('./assets/carte/29.png')},
-    {uri: require('./assets/carte/30.png')}, {uri: require('./assets/carte/31.png')},
-    {uri: require('./assets/carte/32.png')}
+    {uri: require('../assets/carte/0.png')}, {uri: require('../assets/carte/1.png')},
+    {uri: require('../assets/carte/2.png')}, {uri: require('../assets/carte/3.png')},
+    {uri: require('../assets/carte/4.png')}, {uri: require('../assets/carte/5.png')},
+    {uri: require('../assets/carte/6.png')}, {uri: require('../assets/carte/7.png')},
+    {uri: require('../assets/carte/8.png')}, {uri: require('../assets/carte/9.png')},
+    {uri: require('../assets/carte/10.png')}, {uri: require('../assets/carte/11.png')},
+    {uri: require('../assets/carte/12.png')}, {uri: require('../assets/carte/13.png')},
+    {uri: require('../assets/carte/14.png')}, {uri: require('../assets/carte/15.png')},
+    {uri: require('../assets/carte/16.png')}, {uri: require('../assets/carte/17.png')},
+    {uri: require('../assets/carte/18.png')}, {uri: require('../assets/carte/19.png')},
+    {uri: require('../assets/carte/20.png')}, {uri: require('../assets/carte/21.png')},
+    {uri: require('../assets/carte/22.png')}, {uri: require('../assets/carte/23.png')},
+    {uri: require('../assets/carte/24.png')}, {uri: require('../assets/carte/25.png')},
+    {uri: require('../assets/carte/26.png')}, {uri: require('../assets/carte/27.png')},
+    {uri: require('../assets/carte/28.png')}, {uri: require('../assets/carte/29.png')},
+    {uri: require('../assets/carte/30.png')}, {uri: require('../assets/carte/31.png')},
+    {uri: require('../assets/carte/32.png')}
 ]
 
 

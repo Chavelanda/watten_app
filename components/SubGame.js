@@ -8,7 +8,7 @@ import {
     suitNames,
     isTrumpf,
     compareCards
-} from "../utils";
+} from "../utils/utils";
 import {Button} from "react-native-elements";
 import WattenCard from "./WattenCard";
 import SubGameInfo from "./SubGameInfo";

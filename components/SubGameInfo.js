@@ -1,6 +1,6 @@
 import React from "react";
 import {Text, View, StyleSheet, Image} from "react-native";
-import {getCardName, getRankAndSuit, rankNames, suitImages, suitNames} from "../utils";
+import {getCardName, getRankAndSuit, rankNames, suitImages, suitNames} from "../utils/utils";
 
 export default function SubGameInfo (props) {
 

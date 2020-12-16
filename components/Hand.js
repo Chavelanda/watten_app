@@ -1,7 +1,7 @@
 import React from "react";
 import {View, StyleSheet} from "react-native";
 import WattenCard from "./WattenCard";
-import {getCardName, getRankAndSuit} from "../utils";
+import {getCardName, getRankAndSuit} from "../utils/utils";
 
 export default function Hand({hand, validMoves, onPlay}){
 

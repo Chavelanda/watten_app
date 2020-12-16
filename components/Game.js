@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text, StatusBar} from 'react-native';
 import SubGame from "./SubGame";
 import {Button, Overlay} from "react-native-elements";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Game({gen, goBack}) {
 
@@ -12,6 +13,29 @@ export default function Game({gen, goBack}) {
     const [message, setMessage] = useState('')
     const [gameNumber, setGameNumber] = useState(1)
     const winThreshold = 15
+
+    // To update stats
+    useEffect(()=> {
+        async function updateStats() {
+            const genStatsJSON = await AsyncStorage.getItem(gen.toString())
+            const genStats = genStatsJSON !== null ? JSON.parse(genStatsJSON) : null
+            console.log(genStats)
+            const gameWon = winningPlayer === 1 ? 1 : 0
+            const newStats = genStats !== null ?
+                {played: genStats.played + 1, won: genStats.won + gameWon} :
+                {played: 1, won: gameWon}
+
+            try {
+                await AsyncStorage.setItem(gen.toString(), JSON.stringify(newStats))
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        if (winningPlayer !== null) {
+            updateStats()
+        }
+    }, [winningPlayer])
 
     const initGamePrize = () => {
         return (winThreshold - scorePlayerA <= 2 || winThreshold - scorePlayerB <= 2) ? (scorePlayerA < 10 || scorePlayerB < 10) ? 4 : 3 : 2
@@ -29,7 +53,6 @@ export default function Game({gen, goBack}) {
     const checkWin = (winsPlayerA, score) => {
         if (score > 14) {
             winsPlayerA ? setWinningPlayer(1) : setWinningPlayer(-1)
-            // send stats to server
         } else {
             setGameNumber(gameNumber+1)
         }

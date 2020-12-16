@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Card, Overlay} from "react-native-elements";
 import {View, StyleSheet, Image, Pressable} from "react-native";
 import GestureRecognizer from 'react-native-swipe-gestures';
-import {getRankAndSuit, images} from "../utils";
+import {getRankAndSuit, images} from "../utils/utils";
 
 export default function WattenCard({actionId, isValid, onCardPressed, style}) {
 

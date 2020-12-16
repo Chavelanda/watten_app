@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, StyleSheet} from 'react-native';
+import Stats from "../components/Stats";
 
 export default function StatsScreen() {
 
   return (
     <View style={styles.container}>
+      <Stats/>
     </View>
   )
 }
@@ -12,6 +14,6 @@ export default function StatsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'blue'
+    backgroundColor: 'white'
   }
 })
