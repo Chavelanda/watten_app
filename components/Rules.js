@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import {ListItem, Icon} from 'react-native-elements'
+import {View, StyleSheet, Pressable, Text} from 'react-native';
+import {ListItem, Icon, Button} from 'react-native-elements'
 
 const list = [
     {title: 'DECK', icon: 'ios-wallet', navigationScreen: 'Deck'},
@@ -21,7 +21,34 @@ export default function Rules ({navigation}) {
 
     return (
         <View style={styles.container}>
-            {list.map(mapList)}
+            {/*list.map(mapList)*/}
+            <Button
+                type={'outline'}
+                containerStyle={styles.containerStyle}
+                buttonStyle={styles.buttonStyle}
+                title='DECK'
+                titleStyle={styles.text}
+                icon={{name: 'ios-wallet', type: 'ionicon'}}
+                onPress={() => navigation.navigate('Deck')}
+            />
+            <Button
+                type={'outline'}
+                containerStyle={styles.containerStyle}
+                buttonStyle={styles.buttonStyle}
+                title='GAME'
+                titleStyle={styles.text}
+                icon={{name: 'ios-rocket', type: 'ionicon'}}
+                onPress={() => navigation.navigate('GameDes')}
+            />
+            <Button
+                type={'outline'}
+                containerStyle={styles.containerStyle}
+                buttonStyle={styles.buttonStyle}
+                title='HISTORY'
+                titleStyle={styles.text}
+                icon={{name: 'ios-book', type: 'ionicon'}}
+                onPress={() => navigation.navigate('History')}
+            />
         </View>
     )
 }
@@ -29,5 +56,25 @@ export default function Rules ({navigation}) {
 const styles = StyleSheet.create({
     container: {
         flex: 1
+    },
+    buttonStyle: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 20,
+        borderColor: 'black',
+        justifyContent: 'space-around',
+        backgroundColor: 'white'
+    },
+    containerStyle: {
+        flex: 3,
+        margin: 20,
+        backgroundColor: 'white'
+    },
+    smallPress: {
+        flex: 1
+    },
+    text: {
+        fontSize: 40,
+        color: 'black'
     }
 })
