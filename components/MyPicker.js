@@ -1,11 +1,15 @@
 import React from "react";
 import {Text, View, StyleSheet} from "react-native";
-import {Button, Overlay} from "react-native-elements";
+import {Button, Divider, Overlay} from "react-native-elements";
 
-export default function RankSuitChoice ({visible, setVisible, title, list, action}) {
+export default function MyPicker ({visible, setVisible, title, list, action}) {
 
-    const mapList = (str, id) => (
-        <Button titleStyle={styles.text} key={id} title={str} type='clear' onPress={() => action(id)}/>
+    const mapList = (str, id, list) => (
+        <View key={id} style={[styles.listElementContainer, {height: 95/list.length + '%'}]}>
+            {id === 0 ? <Divider /> : null}
+            <Button titleStyle={styles.text} title={str} type='clear' onPress={() => action(id)}/>
+            <Divider />
+        </View>
     )
 
     return (
@@ -26,9 +30,16 @@ const styles=StyleSheet.create({
     },
     choice: {
         flex: 1,
-        justifyContent: 'space-around',
+        justifyContent: 'center',
     },
     text: {
         color: 'black',
+    },
+    listElementContainer: {
+        justifyContent: 'space-around',
+        backgroundColor: 'white'
+    },
+    divider: {
+
     }
 })

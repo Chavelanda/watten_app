@@ -12,7 +12,7 @@ import {
 import {Button} from "react-native-elements";
 import WattenCard from "./WattenCard";
 import SubGameInfo from "./SubGameInfo";
-import RankSuitChoice from "./RankSuitChoice";
+import MyPicker from "./MyPicker";
 import {getMove} from "../api/api";
 import Hand from "./Hand";
 import Table from "./Table";
@@ -352,8 +352,8 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
                 <Hand hand={handPlayerA} validMoves={validMoves} onPlay={playCard} />
             </View>
 
-            <RankSuitChoice visible={chooseRank} setVisible={setChooseRank} title='Choose Rank' list={rankNames.slice(0,-1)} action={onRankChosen}/>
-            <RankSuitChoice visible={chooseSuit} setVisible={setChooseSuit} title='Choose Suit' list={suitNames.slice(0,-1)} action={onSuitChosen}/>
+            <MyPicker visible={chooseRank} setVisible={setChooseRank} title='Choose Rank' list={rankNames.slice(0,-1)} action={onRankChosen}/>
+            <MyPicker visible={chooseSuit} setVisible={setChooseSuit} title='Choose Suit' list={suitNames.slice(0,-1)} action={onSuitChosen}/>
         </View>
     )
 }

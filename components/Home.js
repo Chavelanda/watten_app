@@ -1,36 +1,36 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, Pressable} from 'react-native';
 import {Button, Icon} from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker'
+import MyPicker from "./MyPicker";
 
 export default function Home({navigation}) {
 
     const [gen, setGen] = useState(0)
+    const [pickerVisible, setPickerVisible] = useState(false)
+
+    const levels = ['Super Easy', 'Still Easy', 'You can do this', 'Train for this', 'Tough one']
+
+    const onLevelSelected = (gen) => {
+        setGen(gen)
+        setPickerVisible(false)
+    }
 
     return(
         <View style={styles.container}>
             <View style={styles.title}>
-                <Text>WattenAI</Text>
+                <Text style={styles.titleText}>KARL</Text>
+                <Text style={styles.subtitleText}>The AI Watten player</Text>
             </View>
             <View style={styles.playContainer}>
                 <View style={styles.genContainer}>
-                    <View elevation={5} style={styles.pickerContainer}>
-                        <Picker
-                            selectedValue={gen}
-                            onValueChange={itemValue => setGen(itemValue)}
-                            style={styles.picker}
-                            itemStyle={{fontWeight: 'bold'}}>
-                            <Picker.Item label="Random" value={-1}/>
-                            <Picker.Item label="GEN 0" value={0}/>
-                            <Picker.Item label="GEN 1" value={1}/>
-                            <Picker.Item label="GEN 2" value={2}/>
-                            <Picker.Item label="GEN 3" value={3}/>
-                        </Picker>
+                    <Pressable onPress={() => setPickerVisible(true)} elevation={5} style={styles.pickerContainer}>
+                        <Text style={styles.pickerText}>{levels[gen]}</Text>
                         <Icon containerStyle={styles.iconStyle} name='ios-arrow-down' type='ionicon'/>
-                    </View>
+                    </Pressable>
                 </View>
                 <View style={styles.playButtonContainer}>
-                    <Button titleStyle={styles.buttonTitleStyle} buttonStyle={styles.buttonStyle} title='PLAY' type='outline' raised onPress={() => navigation.navigate('Play', {gen: gen})}/>
+                    <Button titleStyle={styles.buttonTitleStyle} buttonStyle={styles.buttonStyle} title='PLAY' type='outline' raised onPress={() => navigation.navigate('Play', {gen: gen-1})}/>
                 </View>
             </View>
             <View style={styles.buttonContainer}>
@@ -38,6 +38,8 @@ export default function Home({navigation}) {
                 <Button titleStyle={styles.buttonTitleStyle} buttonStyle={styles.buttonStyle} title='STATS' type='outline' raised onPress={() => navigation.navigate('Stats')}/>
                 <Button titleStyle={styles.buttonTitleStyle} buttonStyle={styles.buttonStyle} title='ABOUT' type='outline' raised onPress={() => navigation.navigate('About')}/>
             </View>
+
+            <MyPicker title={'Choose Level'} visible={pickerVisible} setVisible={setPickerVisible} list={levels} action={onLevelSelected}/>
         </View>
     )
 }
@@ -50,8 +52,17 @@ const styles = StyleSheet.create({
     },
     title: {
         flex: 1,
-        justifyContent: 'space-around',
+        justifyContent: 'center',
         alignItems: 'center',
+    },
+    titleText: {
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+        fontSize: 50,
+    },
+    subtitleText: {
+        fontStyle: 'italic',
+        fontSize: 20,
     },
     playContainer: {
         flex: 1,
@@ -75,7 +86,8 @@ const styles = StyleSheet.create({
         height: 41,
         borderColor: 'black',
         borderWidth: 0.3,
-        alignItems: 'center',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
         shadowColor: '#000000',
         shadowOffset: {
             width: 0,
@@ -84,11 +96,10 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         shadowOpacity: 1.0
     },
-    picker: {
-        width: '100%',
-        backgroundColor: 'transparent',
-        borderRadius: 10,
-        height: '100%'
+    pickerText: {
+        paddingHorizontal: 10,
+        marginRight: 20,
+        fontWeight: 'bold',
     },
     iconStyle: {
         position: 'absolute',

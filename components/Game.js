@@ -47,7 +47,7 @@ export default function Game({gen, goBack}) {
                     <Text style={styles.gameText}>GAME {scorePlayerA}</Text>
                 </View>
                 <View style={styles.karlContainer}>
-                    <Text style={styles.nameText}>KARL{gen}</Text>
+                    <Text style={styles.nameText}>KARL{gen+1}</Text>
                     <Text style={styles.gameText}>GAME {scorePlayerB}</Text>
                 </View>
             </View>
@@ -61,6 +61,7 @@ export default function Game({gen, goBack}) {
                         'Ahiahiahi!\nThis time he got you...\n\nStart next hand'}
                     onPress={() => setWonSubGame(null)}
                     type='clear'
+                    titleStyle={styles.overlayText}
                 />
             </Overlay>
             <Overlay isVisible={winningPlayer !== null} overlayStyle={styles.overlay} onBackdropPress={() => goBack()}>
@@ -68,6 +69,7 @@ export default function Game({gen, goBack}) {
                     title={winningPlayer===1 ? message + 'Congratulations, you won!\n\nGo back to Menu' : 'Unfortunately you lost my dear\n\nGo back to menu'}
                     onPress={() => goBack()}
                     type='clear'
+                    titleStyle={styles.overlayText}
                 />
             </Overlay>
 
@@ -120,5 +122,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         height: 'auto'
+    },
+    overlayText: {
+        color: 'black'
     }
 })
