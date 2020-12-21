@@ -3,6 +3,7 @@ import {View, StyleSheet, Text, StatusBar} from 'react-native';
 import SubGame from "./SubGame";
 import {Button, Overlay} from "react-native-elements";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {updateStatsInServer} from "../api/stats";
 
 export default function Game({gen, goBack}) {
 
@@ -19,7 +20,7 @@ export default function Game({gen, goBack}) {
         async function updateStats() {
             const genStatsJSON = await AsyncStorage.getItem(gen.toString())
             const genStats = genStatsJSON !== null ? JSON.parse(genStatsJSON) : null
-            console.log(genStats)
+
             const gameWon = winningPlayer === 1 ? 1 : 0
             const newStats = genStats !== null ?
                 {played: genStats.played + 1, won: genStats.won + gameWon} :
@@ -27,6 +28,7 @@ export default function Game({gen, goBack}) {
 
             try {
                 await AsyncStorage.setItem(gen.toString(), JSON.stringify(newStats))
+                await updateStatsInServer(gen, gameWon)
             } catch (e) {
                 console.log(e)
             }

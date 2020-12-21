@@ -13,7 +13,7 @@ import {Button} from "react-native-elements";
 import WattenCard from "./WattenCard";
 import SubGameInfo from "./SubGameInfo";
 import MyPicker from "./MyPicker";
-import {getMove} from "../api/api";
+import {getMove} from "../api/moves";
 import Hand from "./Hand";
 import Table from "./Table";
 
