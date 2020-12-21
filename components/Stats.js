@@ -3,12 +3,14 @@ import {Pressable, Text, View, StyleSheet, Dimensions, ImageBackground} from "re
 import {Icon} from "react-native-elements";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyPicker from "./MyPicker";
+import {getStatsFromServer} from "../api/stats";
 
 export default function Stats() {
 
     const [pickerVisible, setPickerVisible] = useState(false)
     const [gen, setGen] = useState(-1)
     const [data, setData] = useState(null)
+    const [globalData, setGlobalData] = useState(null)
 
     const levels = ['Super Easy', 'Still Easy', 'You can do this', 'Train for this', 'Tough one']
 
@@ -17,10 +19,14 @@ export default function Stats() {
             const jsonStats = await AsyncStorage.getItem(gen.toString())
             const stats = jsonStats !== null ? JSON.parse(jsonStats) : null
             if (stats !== null) {
-                const percentage = (stats.won/stats.played).toFixed(4)
                 setData(stats)
             } else {
                 setData(null)
+            }
+
+            if (gen >= 0) {
+                const newGlobalData = await getStatsFromServer(gen)
+                setGlobalData(newGlobalData)
             }
         }
 
@@ -41,24 +47,37 @@ export default function Stats() {
                 </Pressable>
             </View>
             <ImageBackground source={require('../assets/sfondo3.jpg')} style={styles.image} imageStyle={styles.image}>
-                {data !== null ?
-                    <View style={styles.graphContainer}>
-                        <Text style={styles.graphText}>Percentage of wins</Text>
-                        <Text style={styles.graphText}>{(data.won/data.played).toFixed(4)*100}%</Text>
-                        <View style={[styles.columnStyle, {height: 160*(data.won/data.played).toFixed(4)}]}>
+                <View style={styles.graphContainer}>
+                    <Text style={[styles.graphText, styles.graphTitle]}>Percentage of wins</Text>
+                    <View style={styles.columnContainer}>
+                        {data !== null ?
+                            <View style={styles.singleColumnContainer}>
+                                <Text style={styles.graphText}>{(data.won / data.played).toFixed(2) * 100}%</Text>
+                                <View style={[styles.columnStyle, {height: 160 * (data.won / data.played).toFixed(4)}]}/>
+                            </View> :
+                            <View style={[styles.singleColumnContainer, {height: 160, justifyContent: 'center'}]}>
+                                <Text>You didn't play{'\n'}any match whit the{'\n'}selected level!</Text>
+                            </View>
+                        }
 
-                        </View>
-                        <View style={styles.lineStyle}>
-
-                        </View>
-                        <View style={styles.textContainer}>
-                            <Text allowFontScaling={false} style={styles.graphText}>YOU</Text>
-                        </View>
-                    </View> :
-                    <View style={[styles.graphContainer, {justifyContent: 'center'}]}>
-                        <Text>No match has been played{'\n'}whit the selected level yet</Text>
+                        {gen !== -1 && globalData !== null && globalData.played > 0?
+                            <View style={styles.singleColumnContainer}>
+                                <Text style={styles.graphText}>{(globalData.won/globalData.played).toFixed(2)*100}%</Text>
+                                <View style={[styles.columnStyle, {height: 160*(globalData.won/globalData.played).toFixed(4)}]}/>
+                            </View> :
+                            <View style={[styles.singleColumnContainer, {justifyContent: 'center'}]}>
+                                <Text>No match has{'\n'}been played whit the{'\n'}selected level yet!</Text>
+                            </View>
+                        }
                     </View>
-                }
+
+                    <View style={styles.lineStyle}/>
+
+                    <View style={styles.textContainer}>
+                        <Text allowFontScaling={false} style={styles.graphText}>YOU</Text>
+                        <Text allowFontScaling={false} style={styles.graphText}>GLOBAL</Text>
+                    </View>
+                </View>
             </ImageBackground>
             {data !== null ?
                 <View style={styles.infoContainer}>
@@ -127,6 +146,16 @@ const styles=StyleSheet.create({
         alignItems: 'center',
         paddingBottom: 20
     },
+    columnContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: Dimensions.get('window').width -40,
+    },
+    singleColumnContainer: {
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        width: (Dimensions.get('window').width -40)/2,
+    },
     columnStyle: {
         width: 40,
         height: 160,
@@ -143,9 +172,16 @@ const styles=StyleSheet.create({
         fontWeight: 'bold',
         fontStyle: 'italic',
     },
+    graphTitle: {
+        position: 'absolute',
+        top: 10,
+    },
     textContainer: {
         height: 20,
-        justifyContent: 'flex-end'
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        justifyContent: 'space-around',
+        width: Dimensions.get('window').width -40,
     },
     infoContainer: {
         flex: 1,
