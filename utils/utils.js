@@ -33,7 +33,7 @@ export const moves = {
     foldHandAndShowValidRaise: 49
 }
 
-export const rankNames = ['7', '8', '9', '10', 'Unter', 'Ober', 'König', 'Ass', 'Weli', '-']
+export const rankNames = ['7', '8', '9', '10', 'Unter', 'Ober', 'König', 'Ace', 'Weli', '-']
 
 export const suitNames = ['laab', 'herz', 'oachl', 'schell', '-']
 

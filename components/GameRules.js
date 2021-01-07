@@ -43,7 +43,7 @@ export default function GameRules() {
             </Text>
             <Text>
                 {'\n'}The cards with the same suit as the Rechte are called Trümpfe (trumps).
-                After the Rechte and the Blinden the Trümpfe are the strongest cards (from the Ass
+                After the Rechte and the Blinden the Trümpfe are the strongest cards (from the Ace
                 to the 7).
             </Text>
             <Text style={styles.example}>
@@ -87,7 +87,7 @@ export default function GameRules() {
             <Text>{'\u2B24'} It has the trump suit.</Text>
             <Text>
                 {'\n'}Both when the opponent accepts or fold, it is checked whether the raise was allowed.
-                If not, then the opponents wins the hand.
+                If not, then the opponent wins the hand.
             </Text>
             <Text style={styles.title}>PRIZE</Text>
             <Text>
