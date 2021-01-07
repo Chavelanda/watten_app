@@ -1,4 +1,4 @@
-const ADDRESS = 'http://192.168.1.228:5000/stats/';
+const ADDRESS = 'http://watten-ai.herokuapp.com/stats/';
 
 export const updateStatsInServer = async (generation, won) => {
 
@@ -20,8 +20,8 @@ export const updateStatsInServer = async (generation, won) => {
 
 export const getStatsFromServer = async (generation) => {
 
-
-    const response = await fetch(ADDRESS + 'get?gen=' + generation)
+    console.log(generation)
+    const response = await fetch(ADDRESS + '/' + generation)
 
     const json = await response.json()
     console.log(json)

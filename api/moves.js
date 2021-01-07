@@ -1,4 +1,4 @@
-const ADDRESS = 'http://192.168.1.228:5000/move/';
+const ADDRESS = 'http://watten-ai.herokuapp.com/move/';
 
 export const getMove = async (generation, state, validMovesZeros) => {
 
