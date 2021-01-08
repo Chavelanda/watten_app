@@ -24,10 +24,9 @@ export default function Stats() {
                 setData(null)
             }
 
-            if (gen >= 0) {
-                const newGlobalData = await getStatsFromServer(gen)
-                setGlobalData(newGlobalData)
-            }
+            const newGlobalData = await getStatsFromServer(gen)
+            setGlobalData(newGlobalData)
+
         }
 
         fetchStats()
@@ -60,7 +59,7 @@ export default function Stats() {
                             </View>
                         }
 
-                        {gen !== -1 && globalData !== null && globalData.played > 0?
+                        {globalData !== null && globalData.played > 0?
                             <View style={styles.singleColumnContainer}>
                                 <Text style={styles.graphText}>{(globalData.won/globalData.played).toFixed(2)*100}%</Text>
                                 <View style={[styles.columnStyle, {height: 160*(globalData.won/globalData.played).toFixed(4)}]}/>

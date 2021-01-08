@@ -21,7 +21,7 @@ export const updateStatsInServer = async (generation, won) => {
 export const getStatsFromServer = async (generation) => {
 
     console.log(generation)
-    const response = await fetch(ADDRESS + '/' + generation)
+    const response = await fetch(ADDRESS + '/get/' + generation)
 
     const json = await response.json()
     console.log(json)
