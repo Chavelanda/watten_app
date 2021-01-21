@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Pressable, Text, View, StyleSheet, Dimensions, ImageBackground} from "react-native";
+import React, {useEffect, useRef, useState} from "react";
+import {Pressable, Text, View, StyleSheet, Dimensions, ImageBackground, Animated} from "react-native";
 import {Icon} from "react-native-elements";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MyPicker from "./MyPicker";
@@ -11,6 +11,9 @@ export default function Stats() {
     const [gen, setGen] = useState(-1)
     const [data, setData] = useState(null)
     const [globalData, setGlobalData] = useState(null)
+    const graphHeight = useRef(new Animated.Value(0)).current
+    const globalGraphHeight = useRef(new Animated.Value(0)).current
+
 
     const levels = ['Super Easy', 'Still Easy', 'You can do this', 'Train for this', 'Tough one']
 
@@ -20,17 +23,35 @@ export default function Stats() {
             const stats = jsonStats !== null ? JSON.parse(jsonStats) : null
             if (stats !== null) {
                 setData(stats)
+                growGraph(stats, graphHeight)
             } else {
                 setData(null)
+                growGraph({won: 0, played: 1}, graphHeight)
             }
 
             const newGlobalData = await getStatsFromServer(gen)
             setGlobalData(newGlobalData)
+            if (newGlobalData !== null && newGlobalData.played > 0) {
+                growGraph(newGlobalData, globalGraphHeight)
+            } else {
+                growGraph({won: 0, played: 1}, globalGraphHeight)
+            }
 
         }
 
         fetchStats()
     }, [gen])
+
+    const growGraph = (stats, graph) => {
+        const height = 160 * (stats.won / stats.played).toFixed(4)
+
+        Animated.timing(graph, {
+            toValue: height,
+            duration: 1000,
+            useNativeDriver: false
+        }).start()
+
+    }
 
     const onLevelSelected = (gen) => {
         setGen(gen-1)
@@ -52,7 +73,7 @@ export default function Stats() {
                         {data !== null ?
                             <View style={styles.singleColumnContainer}>
                                 <Text style={styles.graphText}>{(data.won / data.played).toFixed(2) * 100}%</Text>
-                                <View style={[styles.columnStyle, {height: 160 * (data.won / data.played).toFixed(4)}]}/>
+                                <Animated.View style={[styles.columnStyle, {height: graphHeight}]}/>
                             </View> :
                             <View style={[styles.singleColumnContainer, {height: 160, justifyContent: 'center'}]}>
                                 <Text>You didn't play{'\n'}any match whit the{'\n'}selected level!</Text>
@@ -62,7 +83,7 @@ export default function Stats() {
                         {globalData !== null && globalData.played > 0?
                             <View style={styles.singleColumnContainer}>
                                 <Text style={styles.graphText}>{(globalData.won/globalData.played).toFixed(2)*100}%</Text>
-                                <View style={[styles.columnStyle, {height: 160*(globalData.won/globalData.played).toFixed(4)}]}/>
+                                <Animated.View style={[styles.columnStyle, {height: globalGraphHeight}]}/>
                             </View> :
                             <View style={[styles.singleColumnContainer, {justifyContent: 'center'}]}>
                                 <Text>No match has{'\n'}been played whit the{'\n'}selected level yet!</Text>
