@@ -1,13 +1,37 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text, Pressable} from 'react-native';
 import {Button, Icon} from 'react-native-elements';
-import { Picker } from '@react-native-picker/picker'
 import MyPicker from "./MyPicker";
 
 export default function Home({navigation}) {
 
     const [gen, setGen] = useState(0)
     const [pickerVisible, setPickerVisible] = useState(false)
+    const [serverUp, setServerUp] = useState(false)
+    
+    useEffect( () => {
+        try {
+            pingServer()
+            setServerUp(true)
+        } catch (e) {
+            setServerUp(false)
+        }
+        const interval = setInterval(() =>{
+            try {
+                pingServer()
+                setServerUp(true)
+            } catch (e) {
+                setServerUp(false)
+            }
+        }, 10000)
+
+        return () => clearInterval(interval)
+    }, [])
+
+    const pingServer = async () => {
+        let response = await fetch('http://watten-ai.herokuapp.com/')
+    }
+
 
     const levels = ['Super Easy', 'Still Easy', 'You can do this', 'Train for this', 'Tough one']
 
@@ -19,6 +43,10 @@ export default function Home({navigation}) {
     return(
         <View style={styles.container}>
             <View style={styles.title}>
+                <View style={styles.server}>
+                    <View style={[styles.circle, {backgroundColor: serverUp ? 'lightgreen' : 'red'}]}/>
+                    <Text>{serverUp ? 'Server awake!' : 'Server waking up'}</Text>
+                </View>
                 <Text style={styles.titleText}>KARL</Text>
                 <Text style={styles.subtitleText}>The AI Watten player</Text>
             </View>
@@ -30,7 +58,7 @@ export default function Home({navigation}) {
                     </Pressable>
                 </View>
                 <View style={styles.playButtonContainer}>
-                    <Button titleStyle={styles.buttonTitleStyle} buttonStyle={styles.buttonStyle} title='PLAY' type='outline' raised onPress={() => navigation.navigate('Play', {gen: gen-1})}/>
+                    <Button disabled={!serverUp} titleStyle={styles.buttonTitleStyle} buttonStyle={styles.buttonStyle} title='PLAY' type='outline' raised onPress={() => navigation.navigate('Play', {gen: gen-1})}/>
                 </View>
             </View>
             <View style={styles.buttonContainer}>
@@ -49,6 +77,19 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'transparent',
         margin: 30,
+    },
+    server: {
+        alignSelf: 'flex-start',
+        alignItems: 'center',
+        height: 20,
+        width: 200,
+        flexDirection: 'row',
+    },
+    circle: {
+        height: 16,
+        width: 16,
+        borderRadius: 8,
+        marginRight: 10,
     },
     title: {
         flex: 1,
