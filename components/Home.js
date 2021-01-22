@@ -8,18 +8,16 @@ export default function Home({navigation}) {
     const [gen, setGen] = useState(0)
     const [pickerVisible, setPickerVisible] = useState(false)
     const [serverUp, setServerUp] = useState(false)
-    
+
     useEffect( () => {
         try {
             pingServer()
-            setServerUp(true)
         } catch (e) {
             setServerUp(false)
         }
         const interval = setInterval(() =>{
             try {
                 pingServer()
-                setServerUp(true)
             } catch (e) {
                 setServerUp(false)
             }
@@ -30,6 +28,11 @@ export default function Home({navigation}) {
 
     const pingServer = async () => {
         let response = await fetch('http://watten-ai.herokuapp.com/')
+        if (response.status === 200) {
+            setServerUp(true)
+        } else {
+            setServerUp(false)
+        }
     }
 
 
