@@ -11,26 +11,32 @@ export default function Home({navigation}) {
 
     useEffect( () => {
         try {
-            pingServer()
+            const timeout = setTimeout(() => setServerUp(false), 5000)
+            pingServer(timeout)
         } catch (e) {
             setServerUp(false)
         }
         const interval = setInterval(() =>{
             try {
-                pingServer()
+                const timeout = setTimeout(() => setServerUp(false), 5000)
+                pingServer(timeout)
             } catch (e) {
                 setServerUp(false)
             }
         }, 10000)
 
-        return () => clearInterval(interval)
+        return () => {
+            clearInterval(interval)
+        }
     }, [])
 
-    const pingServer = async () => {
+    const pingServer = async (timeout) => {
         let response = await fetch('http://watten-ai.herokuapp.com/')
         if (response.status === 200) {
+            clearTimeout(timeout)
             setServerUp(true)
         } else {
+            clearTimeout(timeout)
             setServerUp(false)
         }
     }
