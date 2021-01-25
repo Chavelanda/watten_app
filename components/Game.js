@@ -4,7 +4,7 @@ import SubGame from "./SubGame";
 import {Button, Overlay, Icon} from "react-native-elements";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {updateStatsInServer} from "../api/stats";
-import WalkThrough from "./WalkThrough";
+import Walkthrough from "./Walkthrough";
 
 export default function Game({gen, goBack}) {
 
@@ -15,7 +15,7 @@ export default function Game({gen, goBack}) {
     const [message, setMessage] = useState('')
     const [gameNumber, setGameNumber] = useState(1)
     const winThreshold = 15
-    const [showWalkthrough, setShowWalkThrough] = useState(true)
+    const [showWalkthrough, setShowWalkthrough] = useState(false)
 
     // To update stats
     useEffect(()=> {
@@ -40,6 +40,37 @@ export default function Game({gen, goBack}) {
             updateStats()
         }
     }, [winningPlayer])
+
+    // Check if app walkthrough is needed
+    useEffect( () => {
+        async function retrieveWalkthrough() {
+            try {
+                const value = await AsyncStorage.getItem('showWalkthrough')
+                if(value == null) {
+                    setShowWalkthrough(true)
+                }
+            } catch(e) {
+                console.log(e)
+            }
+        }
+
+        retrieveWalkthrough()
+    }, [])
+
+    // Set asyncStorage when showWalkthrough is changed
+    useEffect( () => {
+        async function updateWalkthrough() {
+            try {
+                await AsyncStorage.setItem('showWalkthrough', JSON.stringify(false))
+            } catch (e) {
+                // saving error
+            }
+        }
+
+        if (!showWalkthrough) {
+            updateWalkthrough()
+        }
+    }, [showWalkthrough])
 
     const initGamePrize = () => {
         return (winThreshold - scorePlayerA <= 2 || winThreshold - scorePlayerB <= 2) ? (scorePlayerA < 10 || scorePlayerB < 10) ? 4 : 3 : 2
@@ -73,7 +104,7 @@ export default function Game({gen, goBack}) {
                     <Text style={styles.nameText}>YOU</Text>
                     <Text style={styles.gameText}>GAME {scorePlayerA}</Text>
                 </View>
-                <Icon iconStyle={styles.icon} size={30} name='ios-help-circle-outline' type='ionicon' onPress={() => setShowWalkThrough(true)}/>
+                <Icon iconStyle={styles.icon} size={30} name='ios-help-circle-outline' type='ionicon' onPress={() => setShowWalkthrough(true)}/>
                 <View style={styles.karlContainer}>
                     <Text style={styles.nameText}>KARL{gen+1}</Text>
                     <Text style={styles.gameText}>GAME {scorePlayerB}</Text>
@@ -100,8 +131,8 @@ export default function Game({gen, goBack}) {
                     titleStyle={styles.overlayText}
                 />
             </Overlay>
-            <Overlay isVisible={showWalkthrough} overlayStyle={styles.helpOverlay} onBackdropPress={() => setShowWalkThrough(false)}>
-                <WalkThrough setShowWalkThrough={setShowWalkThrough}/>
+            <Overlay isVisible={showWalkthrough} overlayStyle={styles.helpOverlay} onBackdropPress={() => setShowWalkthrough(false)}>
+                <Walkthrough setShowWalkThrough={setShowWalkthrough}/>
             </Overlay>
 
         </View>

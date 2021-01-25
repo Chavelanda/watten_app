@@ -1,9 +1,9 @@
 import AppIntroSlider from "react-native-app-intro-slider";
 import React from "react";
-import {Dimensions, Image, StyleSheet, Text, View} from "react-native";
+import {Image, StyleSheet, Text, View} from "react-native";
 
 
-export default function WalkThrough({setShowWalkThrough}) {
+export default function Walkthrough({setShowWalkThrough: setShowWalkthrough}) {
 
     const slides = [
         {
@@ -56,9 +56,9 @@ export default function WalkThrough({setShowWalkThrough}) {
         <AppIntroSlider
             data={slides}
             renderItem={renderSlide}
-            onDone={() => setShowWalkThrough(false)}
+            onDone={() => setShowWalkthrough(false)}
             showSkipButton={true}
-            onSkip={() => setShowWalkThrough(false)}
+            onSkip={() => setShowWalkthrough(false)}
             showPrevButton={true}
         />
     )
