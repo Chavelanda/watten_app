@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text, StatusBar} from 'react-native';
 import SubGame from "./SubGame";
-import {Button, Overlay} from "react-native-elements";
+import {Button, Overlay, Icon} from "react-native-elements";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {updateStatsInServer} from "../api/stats";
 import WalkThrough from "./WalkThrough";
@@ -66,14 +66,14 @@ export default function Game({gen, goBack}) {
         return human ? scorePlayerA + prize < winThreshold : scorePlayerB + prize < winThreshold
     }
 
-    return showWalkthrough ?
-        (<WalkThrough setShowWalkThrough={setShowWalkThrough}/>) : (
+    return (
         <View style={styles.container}>
             <View style={styles.gameContainer}>
                 <View style={styles.youContainer}>
                     <Text style={styles.nameText}>YOU</Text>
                     <Text style={styles.gameText}>GAME {scorePlayerA}</Text>
                 </View>
+                <Icon iconStyle={styles.icon} size={30} name='ios-help-circle-outline' type='ionicon' onPress={() => setShowWalkThrough(true)}/>
                 <View style={styles.karlContainer}>
                     <Text style={styles.nameText}>KARL{gen+1}</Text>
                     <Text style={styles.gameText}>GAME {scorePlayerB}</Text>
@@ -99,6 +99,9 @@ export default function Game({gen, goBack}) {
                     type='clear'
                     titleStyle={styles.overlayText}
                 />
+            </Overlay>
+            <Overlay isVisible={showWalkthrough} overlayStyle={styles.helpOverlay} onBackdropPress={() => setShowWalkThrough(false)}>
+                <WalkThrough setShowWalkThrough={setShowWalkThrough}/>
             </Overlay>
 
         </View>
@@ -154,4 +157,15 @@ const styles = StyleSheet.create({
     overlayText: {
         color: 'black'
     },
+    icon: {
+        margin: 10,
+    },
+    helpOverlay: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'transparent',
+
+    }
+
 })
