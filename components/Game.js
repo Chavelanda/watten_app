@@ -4,6 +4,7 @@ import SubGame from "./SubGame";
 import {Button, Overlay} from "react-native-elements";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {updateStatsInServer} from "../api/stats";
+import WalkThrough from "./WalkThrough";
 
 export default function Game({gen, goBack}) {
 
@@ -14,6 +15,7 @@ export default function Game({gen, goBack}) {
     const [message, setMessage] = useState('')
     const [gameNumber, setGameNumber] = useState(1)
     const winThreshold = 15
+    const [showWalkthrough, setShowWalkThrough] = useState(true)
 
     // To update stats
     useEffect(()=> {
@@ -64,7 +66,8 @@ export default function Game({gen, goBack}) {
         return human ? scorePlayerA + prize < winThreshold : scorePlayerB + prize < winThreshold
     }
 
-    return (
+    return showWalkthrough ?
+        (<WalkThrough setShowWalkThrough={setShowWalkThrough}/>) : (
         <View style={styles.container}>
             <View style={styles.gameContainer}>
                 <View style={styles.youContainer}>
@@ -150,5 +153,5 @@ const styles = StyleSheet.create({
     },
     overlayText: {
         color: 'black'
-    }
+    },
 })
