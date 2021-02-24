@@ -41,8 +41,8 @@ export default function Home({navigation}) {
         }
     }
 
-
-    const levels = ['Super Easy', 'Still Easy', 'You can do this', 'Train for this', 'Tough one']
+    const levels = ['Random Player', 'FFNN', 'CNN']
+    // const levels = ['Super Easy', 'Still Easy', 'You can do this', 'Train for this', 'Tough one']
 
     const onLevelSelected = (gen) => {
         setGen(gen)
