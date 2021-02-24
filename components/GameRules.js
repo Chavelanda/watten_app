@@ -69,14 +69,15 @@ export default function GameRules() {
             <Text style={styles.text}>
                 At the beginning of each hand the prize for winning it is 2 points.
                 However, the players have the possibility to raise the prize in each moment of the game.
-                The prize is raised one point at a time. When a player raises, the other can either accept it
-                or fold the hand. When a player folds, the hand is won by the opponent with the prize
+                The prize is raised one point at a time. When a player raises, the other can either accept, raise again or fold
+                the hand. When a player folds, the hand is won by the opponent with the prize
                 before the raise.
             </Text>
             <Text style={styles.example}>
-                E.g. The hand is worth 2 points. Player 1 raises, player 2 can either accept or fold.
-                If player 2 accepts, then the hand goes on with a prize of 3. On the other hand, if
-                player 2 folds, player 1 wins the hand with a prize of 2.
+                E.g. The hand is worth 2 points. Player 1 raises, player 2
+                can either accept, raise or fold. If player 2 accepts, then the
+                hand goes on with a prize of 3. On the other hand, if player
+                2 folds, player 1 wins the hand with a prize of 2.
             </Text>
             <Text style={styles.text}>
                 {'\n'}In the last trick of an hand, the rules for raising are stricter. A player can raise
