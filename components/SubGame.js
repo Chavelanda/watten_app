@@ -32,6 +32,7 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
     const [isLastMoveRaise, setIsLastMoveRaise] = useState(false)
     const [isLastMoveAcceptedRaise, setIsLastMoveAcceptedRaise] = useState(false)
     const [isLastHandRaiseValid, setIsLastHandRaiseValid] = useState(null)
+    const [humanStartedRaising, setHumanStartedRaising] = useState(null)
     const [rank, setRank] = useState(null)
     const [chooseRank, setChooseRank] = useState(false)
     const [suit, setSuit] = useState(null)
@@ -82,6 +83,7 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
         setIsLastMoveRaise(false)
         setIsLastMoveAcceptedRaise(false)
         setIsLastHandRaiseValid(null)
+        setHumanStartedRaising(null)
         setFirstCardDeck(newDeck[0])
         setLastCardDeck(newDeck.slice(-11)[0])
         setRank(null)
@@ -142,7 +144,7 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
     }
 
     const checkRaiseAllowed = (human) => {
-        return (!isLastMoveRaise && !isLastMoveAcceptedRaise && isLastHandRaiseValid === null && checkRaiseMakesSense(human, gamePrize))
+        return (rank !== null && suit !== null && isLastHandRaiseValid === null && checkRaiseMakesSense(human, gamePrize))
     }
 
     const doAITurn = async () => {
@@ -203,6 +205,7 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
         console.log('Game Number: ' + gameNumber)
         console.log('Turn: ' + turn.number + ' Next AI: ' + turn.nextTurnAI)
         console.log('Valid moves: ' + validMoves)
+        console.log('\n---------------------------------------\n')
     }
 
     const mapCards = ({item}) => (
@@ -226,6 +229,10 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
     }
 
     const onRaise = (nextAI=true) => {
+        if (isLastMoveRaise === false) {
+            setHumanStartedRaising(nextAI)
+        }
+        setIsLastMoveAcceptedRaise(false)
         setIsLastMoveRaise(true)
         if (playedCards.length >= 8) {
             setIsLastHandRaiseValid(checkLastHandRaiseValid(nextAI))
@@ -251,7 +258,7 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
     const onAcceptRaise = (nextAI=true) => {
         setIsLastMoveAcceptedRaise(true)
         setIsLastMoveRaise(false)
-        setTurn({number: turn.number+1, nextTurnAI: nextAI})
+        setTurn({number: turn.number+1, nextTurnAI: !humanStartedRaising})
     }
 
     const onFold = (nextAI=true) => {
@@ -338,7 +345,7 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
                         humanStarting={humanStarting} lastCardDeck={lastCardDeck} rank={rank} suit={suit}/>
                 </View>
                 <View style={styles.playedCardContainer}>
-                    <Table isLastMoveRaise={isLastMoveRaise} isLastMoveAcceptedRaise={isLastMoveAcceptedRaise} playedCards={playedCards} turn={turn}/>
+                    <Table isLastMoveRaise={isLastMoveRaise} isLastMoveAcceptedRaise={isLastMoveAcceptedRaise} playedCards={playedCards} turn={turn} humanStartedRaising={humanStartedRaising}/>
                 </View>
                 <View style={styles.buttonsContainer}>
                     {validMoves[35] ? <Button buttonStyle={styles.buttonStyle} title='Raise Prize' onPress={() => onRaise()} type='outline' raised titleStyle={styles.buttonTitleStyle}/> : null}
