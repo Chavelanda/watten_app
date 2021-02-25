@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "watten_app",
+    "name": "Karl",
     "slug": "watten_app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,10 +23,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
+      },
+      "package": "com.chavelanda.watten_app"
     }
   }
 }
