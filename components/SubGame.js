@@ -166,7 +166,8 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
             firstCard: firstCardDeck,
             lastCard: lastCardDeck,
             rank: rank,
-            suit: suit
+            suit: suit,
+            humanStartedRaising: humanStartedRaising
         }
         const move = await getMove(gen, state, getValidMoves(false))
         if (move < 33) {

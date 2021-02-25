@@ -34,7 +34,8 @@ const getMoveFromServer = async (generation, state, validMovesZeros) => {
                 first_card: state.firstCard,
                 last_card: state.lastCard,
                 rank: state.rank,
-                suit: state.suit
+                suit: state.suit,
+                started_raising: state.humanStartedRaising ? 1 : -1
             })
         });
         let json = await response.json()
