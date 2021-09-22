@@ -30,6 +30,7 @@ export default function Home({navigation}) {
         }
     }, [])
 
+    // TODO: automatize pinging heroku
     const pingServer = async (timeout) => {
         let response = await fetch('http://watten-ai.herokuapp.com/')
         if (response.status === 200) {
@@ -49,6 +50,7 @@ export default function Home({navigation}) {
         setPickerVisible(false)
     }
 
+    // TODO: remove level selection
     return(
         <View style={styles.container}>
             <View style={styles.title}>

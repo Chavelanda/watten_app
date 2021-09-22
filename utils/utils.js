@@ -41,6 +41,12 @@ export const suitImages = [
     {uri: require('../assets/semi/laab.png')}, {uri: require('../assets/semi/herz.png')},
     {uri: require('../assets/semi/oachl.png')}, {uri: require('../assets/semi/schell.png')}]
 
+export const isGuate = (cardRank, cardSuit, rank, suit) => {
+    if (rank === 8){
+        return false
+    } else return suit === cardSuit && (rank + 1) % 8 === cardRank;
+}
+
 export const isRechte = (r, s, rank, suit) => {
     return ((r === 8 && rank === 8) || (r === rank && s === suit))
 }
@@ -73,7 +79,11 @@ export const compareCards = (firstPlayed, secondPlayed, rank, suit) => {
     const fRS = getRankAndSuit(firstPlayed)
     const sRS = getRankAndSuit(secondPlayed)
 
-    if (isRechte(fRS[0], fRS[1], rank, suit)) {
+    if (isGuate(fRS[0], fRS[1], rank, suit)){
+      return true
+    } else if (isGuate(sRS[0], sRS[1], rank, suit)) {
+        return false
+    } else if (isRechte(fRS[0], fRS[1], rank, suit)) {
         return true
     } else if (isRechte(sRS[0], sRS[1], rank, suit)) {
         return false
@@ -96,6 +106,7 @@ export const compareCards = (firstPlayed, secondPlayed, rank, suit) => {
     }
 }
 
+// TODO: load images in advance
 export const images = [
     {uri: require('../assets/carte/0.png')}, {uri: require('../assets/carte/1.png')},
     {uri: require('../assets/carte/2.png')}, {uri: require('../assets/carte/3.png')},

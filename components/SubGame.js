@@ -7,6 +7,8 @@ import {
     shuffleArray,
     suitNames,
     isTrumpf,
+    isRechte,
+    isGuate,
     compareCards
 } from "../utils/utils";
 import {Button} from "react-native-elements";
@@ -29,6 +31,7 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
     const [playedCards, setPlayedCards] = useState([])
     const [scorePlayerA, setScorePlayerA] = useState(0)
     const [scorePlayerB, setScorePlayerB] = useState(0)
+    const [lastAcceptedRaiseIsHuman, setLastAcceptedRaiseIsHuman] = useState(null)
     const [isLastMoveRaise, setIsLastMoveRaise] = useState(false)
     const [isLastMoveAcceptedRaise, setIsLastMoveAcceptedRaise] = useState(false)
     const [isLastHandRaiseValid, setIsLastHandRaiseValid] = useState(null)
@@ -84,6 +87,7 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
         setIsLastMoveAcceptedRaise(false)
         setIsLastHandRaiseValid(null)
         setHumanStartedRaising(null)
+        setLastAcceptedRaiseIsHuman(null)
         setFirstCardDeck(newDeck[0])
         setLastCardDeck(newDeck.slice(-11)[0])
         setRank(null)
@@ -119,11 +123,25 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
             hand.forEach((val) => valid[val] = true)
         } else {
             const playedRS = getRankAndSuit(playedCards.slice(-1)[0])
+
             hand.forEach((id) => canPlayCard(id, playedRS) ? valid[id] = true : valid[id] = false)
+
+            //If it can play two cards: the rechte and the guate
+            if (valid.reduce((acc, val) => val ? acc + 1 : acc, 0) === 2) {
+                const id1 = valid.indexOf(true)
+                const id2 = valid.indexOf(true, id1 + 1)
+                const rs1 = getRankAndSuit(id1)
+                const rs2 = getRankAndSuit(id2)
+                if ((isRechte(rs1[0], rs1[1], rank, suit) && isGuate(rs2[0], rs2[1], rank, suit)) ||
+                    (isRechte(rs2[0], rs2[1], rank, suit) && isGuate(rs1[0], rs1[1], rank, suit))) {
+                    hand.forEach((val) => valid[val] = true)
+                }
+            }
+            // If it can play only one card and the card is rechte or guate
             if (valid.reduce((acc, val) => val ? acc + 1 : acc, 0) === 1) {
                 const id = valid.indexOf(true)
                 const rs = getRankAndSuit(id)
-                if (rs[0] === rank && rs[1] === suit) {
+                if (isRechte(rs[0], rs[1], rank, suit) || isGuate(rs[0], rs[1], rank, suit)) {
                     hand.forEach((val) => valid[val] = true)
                 }
             } else if (valid.reduce((acc, val) => val ? acc + 1 : acc, 0) === 0){
@@ -144,9 +162,11 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
     }
 
     const checkRaiseAllowed = (human) => {
-        return (rank !== null && suit !== null && isLastHandRaiseValid === null && checkRaiseMakesSense(human, gamePrize))
+        return (rank !== null && suit !== null && isLastHandRaiseValid === null && checkRaiseMakesSense(human, gamePrize) &&
+        (isLastMoveRaise || lastAcceptedRaiseIsHuman === null || lastAcceptedRaiseIsHuman === human ))
     }
 
+    // TODO: check correctness of state
     const doAITurn = async () => {
         !turn.nextTurnAI ? console.warn("It is impossible to have AI playing" +
             "the turn with nextTurnAI = false") : null
@@ -167,8 +187,10 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
             lastCard: lastCardDeck,
             rank: rank,
             suit: suit,
-            humanStartedRaising: humanStartedRaising
+            humanStartedRaising: humanStartedRaising,
+            lastAcceptedRaiseIsHuman: lastAcceptedRaiseIsHuman
         }
+
         const move = await getMove(gen, state, getValidMoves(false))
         if (move < 33) {
             playCard(move, false)
@@ -192,8 +214,8 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
     const printDebug = () =>{
         console.log('Human Starting: ' + humanStarting)
         console.log('Deck: ' + deck)
-        console.log('Player A hand: ' + handPlayerA)
-        console.log('Player B hand: ' + handPlayerB)
+        console.log('Human hand: ' + handPlayerA)
+        console.log('AI hand: ' + handPlayerB)
         console.log('Played cards: ' + playedCards)
         console.log('Score A: ' + scorePlayerA)
         console.log('Score B: ' + scorePlayerB)
@@ -206,6 +228,7 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
         console.log('Game Number: ' + gameNumber)
         console.log('Turn: ' + turn.number + ' Next AI: ' + turn.nextTurnAI)
         console.log('Valid moves: ' + validMoves)
+        console.log('Can Raise? ' + validMoves[35])
         console.log('\n---------------------------------------\n')
     }
 
@@ -258,6 +281,7 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
 
     const onAcceptRaise = (nextAI=true) => {
         setIsLastMoveAcceptedRaise(true)
+        setLastAcceptedRaiseIsHuman(nextAI)
         setIsLastMoveRaise(false)
         setTurn({number: turn.number+1, nextTurnAI: !humanStartedRaising})
     }
