@@ -4,7 +4,7 @@ import {Linking, ScrollView, StyleSheet, Text} from "react-native";
 
 export default function GameRules() {
 
-
+    // TODO: Update rules
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.title}>OFFENWATTEN</Text>

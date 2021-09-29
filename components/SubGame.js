@@ -166,15 +166,11 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
         (isLastMoveRaise || lastAcceptedRaiseIsHuman === null || lastAcceptedRaiseIsHuman === human ))
     }
 
-    // TODO: check correctness of state
     const doAITurn = async () => {
         !turn.nextTurnAI ? console.warn("It is impossible to have AI playing" +
             "the turn with nextTurnAI = false") : null
         const state = {
             humanStarting: humanStarting,
-            scoreA: scoreA,
-            scoreB: scoreB,
-            handA: handPlayerA,
             handB: handPlayerB,
             playedCards: playedCards,
             currentScoreA: scorePlayerA,
@@ -187,8 +183,7 @@ export default function SubGame({gen, initGamePrize, gameNumber, onSubGameEnd, c
             lastCard: lastCardDeck,
             rank: rank,
             suit: suit,
-            humanStartedRaising: humanStartedRaising,
-            lastAcceptedRaiseIsHuman: lastAcceptedRaiseIsHuman
+            tricks_played: scorePlayerA + scorePlayerB
         }
 
         const move = await getMove(gen, state, getValidMoves(false))

@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text, Pressable} from 'react-native';
+import {View, StyleSheet, Text, Pressable, Image} from 'react-native';
 import {Button, Icon} from 'react-native-elements';
 import MyPicker from "./MyPicker";
+import {images} from "../utils/utils";
 
 export default function Home({navigation}) {
 
@@ -41,9 +42,18 @@ export default function Home({navigation}) {
             setServerUp(false)
         }
     }
+/*
+    // Image loading
+    useEffect(() => {
+        async function loadImages() {
+            await Promise.all(images.map(async img => await Image.prefetch(img.uri)))
+        }
 
-    const levels = ['Random Player', 'FFNN', 'CNN']
-    // const levels = ['Super Easy', 'Still Easy', 'You can do this', 'Train for this', 'Tough one']
+        loadImages()
+
+    }, [])
+*/
+    const levels = ['Random Player', 'Karl']
 
     const onLevelSelected = (gen) => {
         setGen(gen)

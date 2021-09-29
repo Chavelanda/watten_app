@@ -9,7 +9,7 @@ export const getMove = async (generation, state, validMovesZeros) => {
     }
 }
 
-const getMoveFromServer = async (generation, state, validMovesZeros) => {
+const getMoveFromServer = async (state, validMovesZeros) => {
     try {
         let response = await fetch(ADDRESS, {
             method: 'POST',
@@ -18,11 +18,7 @@ const getMoveFromServer = async (generation, state, validMovesZeros) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                generation: generation,
                 distributing: state.humanStarting ? -1 : 1,
-                score_a: state.scoreA,
-                score_b: state.scoreB,
-                hand_a: state.handA,
                 hand_b: state.handB,
                 played_cards: state.playedCards,
                 current_score_a: state.currentScoreA,
@@ -35,7 +31,8 @@ const getMoveFromServer = async (generation, state, validMovesZeros) => {
                 last_card: state.lastCard,
                 rank: state.rank,
                 suit: state.suit,
-                started_raising: state.humanStartedRaising ? 1 : -1
+                valid_moves: validMovesZeros,
+                tricks_played: state.tricks_played
             })
         });
         let json = await response.json()
