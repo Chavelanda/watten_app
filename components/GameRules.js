@@ -4,7 +4,6 @@ import {Linking, ScrollView, StyleSheet, Text} from "react-native";
 
 export default function GameRules() {
 
-    // TODO: Update rules
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.title}>OFFENWATTEN</Text>
@@ -27,14 +26,17 @@ export default function GameRules() {
                 If the first player choses the Weli as rank, that will be the Rechte no matter what suit is chosen.
             </Text>
             <Text style={styles.text}>
-                {'\n'}The card identified by the rank and the suit is called "der Rechte" and it is the strongest one.
+                {'\n'}The card identified by the rank and the suit is called "der Rechte" and it is the second strongest one.
+                The strongest is called the Guate and it is the card with the same suit as the Rechte and one rank higher than it.
+                There are two special cases: if the rank is Ace, the Guate will be the 7; if the rank is Weli, then there is no Guate.
             </Text>
             <Text style={styles.example}>
-                E.g. The first player chooses 8 as rank, the second one chooses herz as suit: the Rechte is the 8 of herz.
+                E.g. The first player chooses 8 as rank, the second one chooses herz as suit: the Rechte is the 8 of herz and
+                the Guate is the 9 of herz.
             </Text>
             <Text style={styles.text}>
                 {'\n'}The cards with the same rank as the Rechte are called "Blinden".
-                The Blinden can be beaten only by the Rechte. In case the rank chosen is the Weli,
+                The Blinden can be beaten only by the Rechte and the Guate. In case the rank chosen is the Weli,
                 there won't be Blinden.
             </Text>
             <Text style={styles.example}>
@@ -43,15 +45,15 @@ export default function GameRules() {
             </Text>
             <Text style={styles.text}>
                 {'\n'}The cards with the same suit as the Rechte are called Trümpfe (trumps).
-                After the Rechte and the Blinden the Trümpfe are the strongest cards (from the Ace
+                After the Guate, the Rechte and the Blinden the Trümpfe are the strongest cards (from the Ace
                 to the 7).
             </Text>
             <Text style={styles.example}>
                 E.g. The first player chooses 7 as rank, the second one chooses oachl as suit:
-                the Trümpfe will be the cards of oachl excluding the 7.
+                the Trümpfe will be the cards of oachl excluding the 7 and the 8.
             </Text>
             <Text style={styles.text}>
-                {'\n'}So, in summary, the cards in descending order of strength are: the Rechte, the Blinden,
+                {'\n'}So, in summary, the cards in descending order of strength are: the Guate, the Rechte, the Blinden,
                 the Trümpfe and all the other cards.
             </Text>
             <Text style={styles.text}>
@@ -68,7 +70,7 @@ export default function GameRules() {
             <Text style={styles.title}>RAISING</Text>
             <Text style={styles.text}>
                 At the beginning of each hand the prize for winning it is 2 points.
-                However, the players have the possibility to raise the prize in each moment of the game.
+                However, the players have the possibility to raise the prize alternately in each moment of the game.
                 The prize is raised one point at a time. When a player raises, the other can either accept, raise again or fold
                 the hand. When a player folds, the hand is won by the opponent with the prize
                 before the raise.
@@ -76,7 +78,8 @@ export default function GameRules() {
             <Text style={styles.example}>
                 E.g. The hand is worth 2 points. Player 1 raises, player 2
                 can either accept, raise or fold. If player 2 accepts, then the
-                hand goes on with a prize of 3. On the other hand, if player
+                hand goes on with a prize of 3 and player 2 will be the only one allowed to raise next time.
+                On the other hand, if player
                 2 folds, player 1 wins the hand with a prize of 2.
             </Text>
             <Text style={styles.text}>
@@ -107,7 +110,7 @@ export default function GameRules() {
                 For a pdf manual (in italian) check <Text style={styles.hyperlink}  onPress={() => Linking.openURL('http://www.fabiovassallo.it/ita/watten.html')}>here</Text>.
             </Text>
             <Text style={styles.lastElement}>
-                If you want to play Watten with other human players online you should check <Text style={styles.hyperlink}  onPress={() => Linking.openURL('https://www.watten.org/')}>here</Text>.
+                If you want to play Watten with other players online you should check <Text style={styles.hyperlink}  onPress={() => Linking.openURL('https://www.watten.org/')}>here</Text>.
             </Text>
         </ScrollView>
     )
