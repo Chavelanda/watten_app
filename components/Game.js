@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {updateStatsInServer} from "../api/stats";
 import Walkthrough from "./Walkthrough";
 
+// TODO: add are you sure you want to exit prompt
 export default function Game({gen, goBack}) {
 
     const [scorePlayerA, setScorePlayerA] = useState(0)

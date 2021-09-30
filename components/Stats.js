@@ -14,9 +14,8 @@ export default function Stats() {
     const graphHeight = useRef(new Animated.Value(0)).current
     const globalGraphHeight = useRef(new Animated.Value(0)).current
 
-    const levels = ['Random Player', 'FFNN', 'CNN']
-    // const levels = ['Super Easy', 'Still Easy', 'You can do this', 'Train for this', 'Tough one']
-
+    const levels = ['Random Player', 'Karl']
+    
     useEffect(() => {
         async function fetchStats () {
             const jsonStats = await AsyncStorage.getItem(gen.toString())
