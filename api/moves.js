@@ -5,7 +5,7 @@ export const getMove = async (generation, state, validMovesZeros) => {
     if (generation === -1){
         return getRandomMove(validMovesZeros)
     } else {
-        return await getMoveFromServer(generation, state, validMovesZeros)
+        return await getMoveFromServer(state, validMovesZeros)
     }
 }
 
