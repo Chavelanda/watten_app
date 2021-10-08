@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     containerStyle: {
         flex: 3,
         margin: 20,
+        borderRadius: 20,
         backgroundColor: 'white'
     },
     smallPress: {
