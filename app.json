@@ -24,7 +24,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.chavelanda.watten_app"
+      "package": "com.chavelanda.watten_app",
+      "permissions": []
     }
   }
 }
